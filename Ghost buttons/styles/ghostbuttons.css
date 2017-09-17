@@ -12,15 +12,17 @@ body {
     float: left;
     margin: 0 20px;
 }
-.link .icon {
-    display: inline-block;
-    width: 100%;
-    height: 280px;
-    transition: all 0.2s ease-out;
+.animationElement {
+    transition: all 0.4s ease-out;
     /* -ms-transition: all 0.2s ease-out;
     -moz-transition: all 0.2s ease-out;
     -webkit-transition: all 0.2s ease-out;
     -o-transition: all 0.3s ease-out; */
+}
+.link .icon {
+    display: inline-block;
+    width: 100%;
+    height: 280px;
 }
 .link-retro .icon {
     background: url(../images/retro.png) no-repeat center center/80% 80%;
@@ -53,11 +55,6 @@ body {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box; */
-    transition: all 0.2s ease-out;
-    /* -ms-transition: all 0.2s ease-out;
-    -moz-transition: all 0.2s ease-out;
-    -webkit-transition: all 0.2s ease-out;
-    -o-transition: all 0.3s ease-out; */
 }
 .button::after {
     position: absolute;
@@ -69,7 +66,71 @@ body {
     height: 46px;
     line-height: 46px;
     font-size: 30px;
+    transition: all 0.4s ease-out;
+    /* -ms-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    -o-transition: all 0.3s ease-out; */
 }
 .button:hover{
     border: 2px solid rgba(255, 255, 255, 1);
+}
+.button:hover::after{
+    position: absolute;
+    top: 0px;
+    left: 220px;
+    display: block;
+    content: '→';
+    width: 50px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 30px;
+}
+.button .line {
+    display: block;
+    position: absolute;
+    background: none;
+}
+.button:hover .line {
+    background: #fff;
+}
+.button .line_top {
+    height: 2px;
+    width: 0px;
+    top: -2px;
+    left: -100%;
+}
+.button:hover .line_top {
+    width: 100%;
+    left: -2px;
+}
+.button .line_right {
+    height: 0px;
+    width: 2px;
+    top: -100%;
+    left: 100%;
+}
+.button:hover .line_right {
+    height: 100%;
+    top: -2px;
+}
+.button .line_bottom {
+    height: 2px;
+    width: 0px;
+    right: -100%;
+    bottom: -2px;
+}
+.button:hover .line_bottom {
+    width: 100%;
+    right: -2px;
+}
+.button .line_left {
+    height: 0px;
+    width: 2px;
+    bottom: -100%;
+    left: -2px;
+}
+.button:hover .line_left {
+    bottom: -2px;
+    height: 100%;
 }
