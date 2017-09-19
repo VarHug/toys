@@ -1,2 +1,2 @@
 # Ghost buttons
-幽灵按钮案例
+纯CSS幽灵按钮案例
