@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag Panel</title>
+    <link rel="stylesheet" href="./styles/reset.css">
+    <link rel="stylesheet" href="./styles/dragPanel.css">
+</head>
+<body>
+    <div class="loginPanel" id="loginPanel">
+        <div style="position: relative; z-index: 1;">
+            <div class="ui_boxClose" id="ui_boxClose"></div>
+        </div>
+        <div class="login_logo_webqq"></div>
+        <div class="inputs">
+            <div class="sign_input">
+                <span>帐 号：</span>
+                <span><input type="text" name="uid" id="uid" tabindex="1" class="input_uid" value="QQ号码或Email帐号"></span>
+            </div>
+            <div class="sign_input">
+                <span>密 码：</span>
+                <span><input type="password" name="password" id="password" tabindex="2" class="input_password" maxlength="16"></span>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="login_btn"></div>
+            <div id="loginState" class="login_state_trigger login_state" title="选择在线状态">
+                <div id="loginStateShow" class="login_state_show online"></div>
+                <div class="login_state_down"></div>
+                <div id="loginStateTxt" class="login_state_txt">在线</div>
+                <ul id="loginStatePanel" class="login_state_panel">
+                    <li id="online" class="statePanel_li">
+                        <div class="stateSelect_icon online"></div>
+                        <div class="stateSelect_txt">我在线上</div>
+                    </li>
+                    <li id="callme" class="statePanel_li">
+                        <div class="stateSelect_icon callme"></div>
+                        <div class="stateSelect_txt">Q我吧</div>
+                    </li>
+                    <li id="away" class="statePanel_li">
+                        <div class="stateSelect_icon away"></div>
+                        <div class="stateSelect_txt">离开</div>
+                    </li>
+                    <li id="busy" class="statePanel_li">
+                        <div class="stateSelect_icon busy"></div>
+                        <div class="stateSelect_txt">忙碌</div>
+                    </li>
+                    <li id="silent" class="statePanel_li">
+                        <div class="stateSelect_icon silent"></div>
+                        <div class="stateSelect_txt">请勿打扰</div>
+                    </li>
+                    <li id="hidden" class="statePanel_li">
+                        <div class="stateSelect_icon hidden"></div>
+                        <div class="stateSelect_txt">隐身</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
