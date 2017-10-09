@@ -107,36 +107,75 @@ function changeState() {
         stateList = getById('loginStatePanel'),
         stateListLi = stateList.getElementsByTagName('li'),
         stateTxt = getById('loginStateTxt'),
-        loginStateShow = getById('loginStateShow');
+        loginStateShow = getById('loginStateShow'),
+        index = -1;
     //点击切换状态时事件处理程序    
     EventUtil.addHandler(loginState, 'click', function(event) {
         let loginStateEvent = EventUtil.getEvent(event);
         EventUtil.stopProagation(loginStateEvent);
         stateList.style.display = 'block';
     });
+    //键盘事件处理程序
+    EventUtil.addHandler(document, 'keydown', function(event) {
+        let loginStateKeyEvent = EventUtil.getEvent(event);
+        EventUtil.stopProagation(loginStateKeyEvent);
+        if(loginStateKeyEvent.keyCode === 40) {
+            if(index < stateListLi.length - 1) {
+                if(index >= 0) {
+                    stateListLi[index].style.backgroundColor = '#fff';
+                }
+                stateListLi[++index].style.backgroundColor = '#567';
+            } else {
+                index = 0;
+                stateListLi[index].style.backgroundColor = '#567';
+                stateListLi[stateListLi.length - 1].style.backgroundColor = '#fff';
+            }
+        } else if (loginStateKeyEvent.keyCode === 38) {
+            if(index > 0) {
+                stateListLi[index].style.backgroundColor = '#fff';
+                stateListLi[--index].style.backgroundColor = '#567';
+            } else {
+                index = stateListLi.length - 1;
+                stateListLi[index].style.backgroundColor = '#567';
+                stateListLi[0].style.backgroundColor = '#fff';
+            }
+        } else if (loginStateKeyEvent.keyCode === 13) {
+            changeStateComplete();
+        }
+    }) ;
     //鼠标滑过、离开和点击状态列表事件处理程序
     for(let i = 0, len = stateListLi.length; i < len; i++) {
-        //滑过事件处理程序
+        //鼠标滑过事件处理程序
         EventUtil.addHandler(stateListLi[i], 'mouseover', function(event) {
+            if(index >= 0) {
+                stateListLi[index].style.backgroundColor = '#fff';
+            }
+            index = i;
             stateListLi[i].style.backgroundColor = '#567';
         });
         //离开事件处理程序
-        EventUtil.addHandler(stateListLi[i], 'mouseout', function(event) {
-            stateListLi[i].style.backgroundColor = '#fff';
-        });
+        // EventUtil.addHandler(stateListLi[i], 'mouseout', function(event) {
+        //     stateListLi[i].style.backgroundColor = '#fff';
+        // });
         //点击事件处理程序
         EventUtil.addHandler(stateListLi[i], 'click', function(event) {
             let stateListLiEvent = EventUtil.getEvent(event);
             EventUtil.stopProagation(stateListLiEvent);
-            stateList.style.display = 'none';
-            let liId = stateListLi[i].id;
-            stateTxt.innerText = getByClass('stateSelect_txt', liId)[0].innerText;
-            loginStateShow.className = '';
-            loginStateShow.className = 'login_state_show ' + liId;
+            changeStateComplete();
         }); 
     }
     //其他地方点击事件处理程序（隐藏ul）
     EventUtil.addHandler(document, 'click', function(event) {
         stateList.style.display = 'none';
     });
+    //切换状态时点击或者回车事件处理函数
+    function changeStateComplete() {
+        stateList.style.display = 'none';
+        stateListLi[index].style.backgroundColor = '#fff';
+        let liId = stateListLi[index].id;
+        stateTxt.innerText = getByClass('stateSelect_txt', liId)[0].innerText;
+        loginStateShow.className = '';
+        loginStateShow.className = 'login_state_show ' + liId;
+        index = -1;
+    }
 }
