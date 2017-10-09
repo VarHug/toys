@@ -1,0 +1,31 @@
+.title {
+    width: 400px;
+    height: 70px;
+    margin: 0 auto;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f00;
+}
+.btns {
+    width: 185px;
+    height: 30px;
+    margin: 0 auto;
+}
+.btns span {
+    display: block;
+    float: left;
+    width: 80px;
+    height: 27px;
+    line-height: 27px;
+    background: #036;
+    border: 1px solid #eee;
+    border-radius: 7px;
+    margin-right: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-family: "微软雅黑";
+    cursor: pointer;
+}
