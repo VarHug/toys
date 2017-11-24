@@ -1,11 +1,21 @@
 'use strict';
 
+//初始化状态
+const STATE_INITTAL = 0;
+//开始状态
+const STATE_START = 1;
+//停止状态
+const STATE_STOP = 2;
+
 /**
  * 帧动画库类
  * @constructor
  */
 function Animation() {
-    
+    //任务链   
+    this.taskQueue = [];
+    this.index = 0;
+    this.state = STATE_INITTAL;
 }
 
 /**
