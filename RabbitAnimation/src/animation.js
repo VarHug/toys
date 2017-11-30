@@ -1,6 +1,7 @@
 'use strict';
 
 var loadImage = require('./imageloader');
+var Timeline = require('./timeline');
 
 //初始化状态
 const STATE_INITTAL = 0;
@@ -14,6 +15,15 @@ const TASK_SYNC = 0;
 const TASK_ASYNC = 1;
 
 /**
+ * 简单的函数封装,执行callback
+ * 
+ * @param {any} callback 执行的函数
+ */
+function next(callback) {
+    callback && callback();
+}
+
+/**
  * 帧动画库类
  * @constructor
  */
@@ -22,6 +32,8 @@ function Animation() {
     this.taskQueue = [];
     this.index = 0;
     this.state = STATE_INITTAL;
+    //timeline实例
+    this.timeline = new Timeline();
 }
 
 /**
@@ -46,7 +58,31 @@ Animation.prototype.loadImage = function (imglist) {
  * @param {any} imageUrl 图片地址
  */
 Animation.prototype.changePosition = function (ele, positions, imageUrl) {
-    
+    var len = positions.length;
+    var taskFn;
+    var type;
+    if(len) {
+        var that = this;
+        taskFn = function (next, time) {
+            if(imgUrl) {
+                ele.style.backgroundImage = 'url(' + imgUrl + ')';  
+            }
+            //获得当前背景图片位置索引
+            var index = Math.min(time / that.interval | 0, len - 1);
+            var position = positions.split(' ');
+            //改变dom对象背景的图片位置
+            ele.style.backgroundPosition = position[0] + 'px ' + position[1] + 'px';
+            if(index === len - 1) {
+                next();
+            }
+        };
+        type = TASK_ASYNC;
+    } else {
+        taskFn = next();
+        type = TASK_SYNC;
+    }
+
+    return this._add(taskFn, type);
 };
 
 /**
@@ -203,7 +239,21 @@ Animation.prototype._syncTask = function (task) {
  * @param {any} task 执行的任务对象
  */
 Animation.prototype._asyncTask = function (task) {
-    
+    var that = this;
+    //定义每一帧执行的回调函数
+    var enterFrame = function (time) {
+        var taskFn = task.taskFn;
+        var next = function () {
+            //停止当前任务
+            that.timeline.stop();
+            //执行下一个任务
+            that._next();
+        }
+        taskFn(next, time);
+    };
+
+    this.timeline.onenterframe = enterFrame;
+    this.timeline.start(this.interval);
 };
 
 /**

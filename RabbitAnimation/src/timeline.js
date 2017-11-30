@@ -130,3 +130,5 @@ function startTimeline(timeline, startTime) {
         }
     }
 }
+
+module.exports = Timeline;
