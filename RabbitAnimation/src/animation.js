@@ -92,7 +92,27 @@ Animation.prototype.changePosition = function (ele, positions, imageUrl) {
  * @param {any} imglist 图片数组
  */
 Animation.prototype.changeSrc = function (ele, imglist) {
-    
+    var len = imglist.length;
+    var taskFn;
+    var type;
+    if (len) {
+        var that = this;
+        taskFn = function (next, time) {
+            //获得当前图片索引
+            var index = Math.min(time / that.interval | 0, len - 1);
+            //改变image对象的图片地址
+            ele.src = imglist[index];
+            if(index === len - 1) {
+                next();
+            }
+        };
+        type = TASK_ASYNC;
+    } else {
+        taskFn = next;
+        type = TASK_SYNC;
+    }
+
+    return this._add(taskFn, type);
 };
 
 /**
@@ -101,7 +121,7 @@ Animation.prototype.changeSrc = function (ele, imglist) {
  * @param {any} taskFn 自定义每帧执行的任务函数
  */
 Animation.prototype.enterFrame = function (taskFn) {
-    
+    return this._add(taskFn, TASK_ASYNC);
 };
 
 /**
@@ -110,7 +130,13 @@ Animation.prototype.enterFrame = function (taskFn) {
  * @param {any} callback 回调函数
  */
 Animation.prototype.then = function (callback) {
-    
+    var taskFn = function (next) {
+        callback();
+        next();
+    };
+    var type = TASK_SYNC;
+
+    return this._add(taskFn, type);
 };
 
 /**
@@ -135,10 +161,31 @@ Animation.prototype.start = function (interval) {
 /**
  * 该任务就是回退到上一个任务中从而实现重复上一个任务的效果，该任务可以定义重复的次数
  * 同步任务
- * @param {any} items 重复次数
+ * @param {any} times 重复次数
  */
-Animation.prototype.repeat = function (items) {
-    
+Animation.prototype.repeat = function (times) {
+    var that = this;
+    var taskFn = function () {
+        if(typeof times === 'undefined') {
+            //无限回退到上一个任务
+            that.index--;
+            that._runTask();
+            return;
+        }
+        if (times) {
+            times--;
+            //回退
+            that.index--;
+            that._runTask();
+        } else {
+            //达到重复次数，跳转下一个任务
+            var task = that.taskQueue[that.index];
+            that._next(task);
+        }
+    };
+    var type = TASK_SYNC;
+
+    return this._add(taskFn, type);
 };
 
 /**
@@ -146,7 +193,7 @@ Animation.prototype.repeat = function (items) {
  * 同步任务
  */
 Animation.prototype.repeatForever = function () {
-    
+    return this.repeat();
 };
 
 /**
@@ -155,7 +202,10 @@ Animation.prototype.repeatForever = function () {
  * @param {any} time 等待时长
  */
 Animation.prototype.wait = function (time) {
-    
+    if(this.taskQueue && this.taskQueue.length > 0) {
+        this.taskQueue[this.taskQueue.length - 1].wait = time;
+    }
+    return this;
 };
 
 /**
@@ -163,7 +213,12 @@ Animation.prototype.wait = function (time) {
  * 
  */
 Animation.prototype.pause = function () {
-    
+    if(this.state === STATE_START) {
+        this.state = STATE_STOP;
+        this.timeline.stop();
+        return this;
+    }
+    return this;
 };
 
 /**
@@ -171,7 +226,12 @@ Animation.prototype.pause = function () {
  * 
  */
 Animation.prototype.restart = function () {
-    
+    if(this.state === STATE_STOP) {
+        this.state = STATE_START;
+        this.timeline.restart();
+        return this;
+    }
+    return this;
 };
 
 /**
@@ -179,7 +239,14 @@ Animation.prototype.restart = function () {
  * 
  */
 Animation.prototype.dispose = function () {
-    
+    if(this.state !== STATE_INITTAL) {
+        this.state = STATE_INITTAL;
+        this.taskQueue = null;
+        this.timeline.stop();
+        this.timeline = null;
+        return this;
+    }
+    return this;
 }
 
 /**
@@ -227,7 +294,7 @@ Animation.prototype._syncTask = function (task) {
     var that = this;
     var next = function () {
       //切换到下一个任务  
-      that._next();
+      that._next(task);
     };
 
     var taskFn = task.taskFn;
@@ -247,7 +314,7 @@ Animation.prototype._asyncTask = function (task) {
             //停止当前任务
             that.timeline.stop();
             //执行下一个任务
-            that._next();
+            that._next(task);
         }
         taskFn(next, time);
     };
@@ -258,9 +325,14 @@ Animation.prototype._asyncTask = function (task) {
 
 /**
  * 切换到下一个任务
- * 
+ * 支持如果当前任务等待，则延迟执行
+ * @param task 当前任务
+ * @private
  */
-Animation.prototype._next = function () {
+Animation.prototype._next = function (task) {
     this.index++;
-    this._runTask();
+    var that = this;
+    task.wait ? setTimeout(function () {
+        that._runTask();
+    }, task.wait) : this._runTask();
 };
