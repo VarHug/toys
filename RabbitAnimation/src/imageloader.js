@@ -115,11 +115,3 @@ function getId() {
 }
 
 module.exports = loadImage;
-
-function callback(boolean) {
-    if(boolean) {
-        console.log('图片已加载完成');
-    } else {
-        console.log('图片加载失败');
-    }
-}

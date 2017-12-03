@@ -19,7 +19,7 @@ var requestAnimationFrame = (function () {
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
         function (callback) {
-            return window.setTimeout(callback, (callback.interval || DEFAULT_INTERVAL));
+            return window.setTimeout(callback, callback.interval || DEFAULT_INTERVAL);
         };
 })();
 
@@ -107,12 +107,10 @@ Timeline.prototype.restart = function () {
  * @param {any} startTime 动画开始时间戳
  */
 function startTimeline(timeline, startTime) {
-    //记录上一次回调的时间戳
-    var lastTick = +new Date();
-
     timeline.startTime = startTime;
     nextTick.interval = timeline.interval;
-    
+    //记录上一次回调的时间戳
+    var lastTick = +new Date();
     nextTick(); 
 
     /**
@@ -127,7 +125,7 @@ function startTimeline(timeline, startTime) {
         //如果当前时间与上一次回调的时间戳大于等于设置的时间间隔，
         //表示这一次可以执行回调函数
         if(now - lastTick >= timeline.interval) {
-            timeline.onenterframe(now - startTime);
+            timeline.onenterframe(now - lastTick);
             lastTick = now;
         }
     }

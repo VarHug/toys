@@ -68,17 +68,17 @@ Animation.prototype.changePosition = function (ele, positions, imageUrl) {
                 ele.style.backgroundImage = 'url(' + imgUrl + ')';  
             }
             //获得当前背景图片位置索引
-            var index = Math.min(time / that.interval | 0, len - 1);
-            var position = positions.split(' ');
+            var index = Math.min(time / that.interval | 0, len);
+            var position = positions[index - 1].split(' ');
             //改变dom对象背景的图片位置
             ele.style.backgroundPosition = position[0] + 'px ' + position[1] + 'px';
-            if(index === len - 1) {
+            if(index === len) {
                 next();
             }
         };
         type = TASK_ASYNC;
     } else {
-        taskFn = next();
+        taskFn = next;
         type = TASK_SYNC;
     }
 
@@ -335,4 +335,8 @@ Animation.prototype._next = function (task) {
     task.wait ? setTimeout(function () {
         that._runTask();
     }, task.wait) : this._runTask();
+};
+
+module.exports = function () {
+    return new Animation();
 };
