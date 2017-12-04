@@ -144,8 +144,8 @@ Animation.prototype.changePosition = function (ele, positions, imageUrl) {
     if(len) {
         var that = this;
         taskFn = function (next, time) {
-            if(imgUrl) {
-                ele.style.backgroundImage = 'url(' + imgUrl + ')';  
+            if(imageUrl) {
+                ele.style.backgroundImage = 'url(' + imageUrl + ')';  
             }
             //获得当前背景图片位置索引
             var index = Math.min(time / that.interval | 0, len);
