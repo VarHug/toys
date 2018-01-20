@@ -19,16 +19,17 @@
             "height" :  347,             //区域的高度
             "posterWidth" : 800,         //图片的宽度
             "posterHeight" : 347,        //图片的高度
-            "scale" : 0.9,
+            "scale" : 0.9,               //缩放比例
             "speed" : 500,
             "verticalAlign" : "middle"
         };
 
         //获取配置参数
         $.extend(this.setting, this.getSetting());
-        console.log(this.setting);
         //设置配置参数
         this.setSettingValue();
+        //设置剩余帧的位置关系
+        this.setPosterPos();
     }
 
     /**
@@ -67,8 +68,57 @@
         //第一帧图片的绝对定位左边距
         var dis = (this.setting.width - this.setting.posterWidth) / 2;
         this.$posterFirstItem.css({
+            width : this.setting.posterWidth,
+            height : this.setting.posterHeight,
             left : dis,
             zIndex : this.posterCount / 2 | 0
+        });
+    };
+
+    /**
+     * 设置剩余的帧的位置关系
+     * 
+     */
+    Carousel.prototype.setPosterPos = function () {
+        var that = this;
+        var sliceItems = this.$posterItems.slice(1),
+            sliceLen = sliceItems.length / 2,
+            rightSliceItems = sliceItems.slice(0, sliceLen),
+            level = this.posterCount / 2 | 0,
+            rightWidth = this.setting.posterWidth,
+            rightHeight = this.setting.posterHeight,
+            scale = this.setting.scale,
+            gap = ((this.setting.width - this.setting.posterWidth) / 2) / level |0,
+            fixOffsetLeft = (this.setting.width - this.setting.posterWidth) / 2 + rightWidth;
+
+        //设置右边帧的参数
+        rightSliceItems.each(function (index) {
+            ++index;
+            $(this).css({
+                zIndex : --level,
+                width : rightWidth *= scale,
+                height : rightHeight *= scale,
+                opacity : 1 / index,
+                left : fixOffsetLeft + gap * index - rightWidth,
+                top : (that.setting.height - rightHeight) / 2
+            });
+        });
+
+        level--;
+        rightWidth *= scale;
+        rightHeight *= scale;
+        var leftSliceItems = sliceItems.slice(sliceLen),
+            leftLen = leftSliceItems.length;
+        //设置左边帧的参数
+        leftSliceItems.each(function (index) {
+            $(this).css({
+                zIndex : ++level,
+                width : rightWidth /= scale,
+                height : rightHeight /= scale,
+                opacity : 1 / leftLen--,
+                left : (index++) * gap,
+                top : (that.setting.height - rightHeight) / 2
+            });
         });
     };
 

@@ -15,7 +15,6 @@
 }
 .poster_item a, .poster_item img {
     display: block;
-    height: 347px;
 }
 .poster_btn {
     position: absolute;
