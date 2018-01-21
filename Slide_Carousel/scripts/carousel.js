@@ -100,7 +100,6 @@
                 height : rightHeight *= scale,
                 opacity : 1 / index,
                 left : fixOffsetLeft + gap * index - rightWidth,
-                top : (that.setting.height - rightHeight) / 2
                 top : that.setVertucalAlign(rightHeight)
             });
         });
@@ -118,9 +117,29 @@
                 height : rightHeight /= scale,
                 opacity : 1 / leftLen--,
                 left : (index++) * gap,
-                top : (that.setting.height - rightHeight) / 2
+                top : that.setVertucalAlign(rightHeight)
             });
         });
+    };
+
+    /**
+     * 设置对其方式
+     * 
+     * @param {number} height 
+     */
+    Carousel.prototype.setVertucalAlign = function (height) {
+        var verticalType = this.setting.verticalAlign,
+            top = 0;
+        if (verticalType === 'middle') {
+            top = (this.setting.height - height) / 2;
+        } else if (verticalType === 'top') {
+            top = 0;
+        } else if(verticalType === 'bottom') {
+            top = this.setting.height - height;
+        } else {
+            top = (this.setting.height - height) / 2;
+        }
+        return top;
     };
 
     
