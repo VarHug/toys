@@ -5,12 +5,14 @@
      * @param {any} poster 旋转木马控件
      */
     var Carousel = function (poster) {
+        var that = this;
         this.$poster = poster;
         this.$poster_list = poster.find('.poster_list');
         this.$prevBtn = poster.find('.poster_prev_btn');
         this.$nextBtn = poster.find('.poster_next_btn');
         this.$posterItems = poster.find('.poster_item');
-        this.$posterFirstItem = this.$posterItems.eq(0);
+        this.$posterFirstItem = this.$posterItems.first();
+        this.$posterLastItem = this.$posterItems.last();
         this.posterCount = this.$posterItems.length;
         
         //默认配置参数
@@ -30,6 +32,14 @@
         this.setSettingValue();
         //设置剩余帧的位置关系
         this.setPosterPos();
+
+        this.$nextBtn.click(function () {
+            that.carouselRotate('left');
+        });
+
+        this.$prevBtn.click(function () {
+            that.carouselRotate('right');
+        });
     }
 
     /**
@@ -140,6 +150,56 @@
             top = (this.setting.height - height) / 2;
         }
         return top;
+    };
+
+    /**
+     * 旋转函数
+     * 
+     * @param {string} dir 旋转方向 
+     */
+    Carousel.prototype.carouselRotate = function (dir) {
+        var that = this;
+        if(dir === 'left') {
+            this.$posterItems.each(function () {
+                var self = $(this),
+                    prev = self.prev().get(0) ? self.prev() : that.$posterLastItem,
+                    width = prev.width(),
+                    height = prev.height(),
+                    zIndex = prev.css('zIndex'),
+                    opacity = prev.css('opacity'),
+                    left = prev.css('left'),
+                    top = prev.css('top');
+
+                self.animate({
+                    width : width,
+                    height : height,
+                    zIndex : zIndex,
+                    opacity : opacity,
+                    left : left,
+                    top : top
+                });
+            });
+        } else if (dir === 'right') {
+            this.$posterItems.each(function () {
+                var self = $(this),
+                    next = self.next().get(0) ? self.next() : that.$posterFirstItem,
+                    width = next.width(),
+                    height = next.height(),
+                    zIndex = next.css('zIndex'),
+                    opacity = next.css('opacity'),
+                    left = next.css('left'),
+                    top = next.css('top');
+
+                self.animate({
+                    width : width,
+                    height : height,
+                    zIndex : zIndex,
+                    opacity : opacity,
+                    left : left,
+                    top : top
+                    })
+            });     
+        }
     };
 
     
