@@ -101,6 +101,7 @@
                 opacity : 1 / index,
                 left : fixOffsetLeft + gap * index - rightWidth,
                 top : (that.setting.height - rightHeight) / 2
+                top : that.setVertucalAlign(rightHeight)
             });
         });
 
