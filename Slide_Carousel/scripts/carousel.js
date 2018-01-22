@@ -14,7 +14,7 @@
         this.$posterFirstItem = this.$posterItems.first();
         this.$posterLastItem = this.$posterItems.last();
         this.posterCount = this.$posterItems.length;
-        
+        this.rotateFinish = true;
         //默认配置参数
         this.setting = {
             "width" : 1000,              //区域的宽度
@@ -34,11 +34,17 @@
         this.setPosterPos();
 
         this.$nextBtn.click(function () {
-            that.carouselRotate('left');
+            if (that.rotateFinish) {
+                that.rotateFinish = false;
+                that.carouselRotate('left');
+            }
         });
 
         this.$prevBtn.click(function () {
-            that.carouselRotate('right');
+           if (that.rotateFinish) {
+                that.rotateFinish = false;
+                that.carouselRotate('right');
+           }
         });
     }
 
@@ -159,6 +165,7 @@
      */
     Carousel.prototype.carouselRotate = function (dir) {
         var that = this;
+        var zIndexArr = [];
         if(dir === 'left') {
             this.$posterItems.each(function () {
                 var self = $(this),
@@ -169,15 +176,20 @@
                     opacity = prev.css('opacity'),
                     left = prev.css('left'),
                     top = prev.css('top');
+                zIndexArr.push(zIndex);
 
                 self.animate({
                     width : width,
                     height : height,
-                    zIndex : zIndex,
                     opacity : opacity,
                     left : left,
                     top : top
+                }, function () {
+                    that.rotateFinish = true;
                 });
+            });
+            this.$posterItems.each(function (index) {
+                $(this).css('zIndex', zIndexArr[index]);
             });
         } else if (dir === 'right') {
             this.$posterItems.each(function () {
@@ -189,15 +201,20 @@
                     opacity = next.css('opacity'),
                     left = next.css('left'),
                     top = next.css('top');
+                zIndexArr.push(zIndex);
 
                 self.animate({
                     width : width,
                     height : height,
-                    zIndex : zIndex,
                     opacity : opacity,
                     left : left,
                     top : top
-                    })
+                    }, function () {
+                        that.rotateFinish = true;
+                    });
+            });
+            this.$posterItems.each(function (index) {
+                $(this).css('zIndex', zIndexArr[index]);
             });     
         }
     };

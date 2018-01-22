@@ -34,10 +34,10 @@
     z-index: 10;
 }
 .poster_prev_btn {
-    left: 0;
+    left: 5px;
 }
 .poster_next_btn {
-    right: 0;
+    right: 5px;
 }
 .poster_btn:hover {
     background-color: rgba(0, 0, 0, 0.7);
