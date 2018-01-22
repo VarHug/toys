@@ -11,9 +11,15 @@
         this.$prevBtn = poster.find('.poster_prev_btn');
         this.$nextBtn = poster.find('.poster_next_btn');
         this.$posterItems = poster.find('.poster_item');
+        this.posterCount = this.$posterItems.length;
+        if(!(this.posterCount & 1)) {
+            this.$posterItems.eq(this.posterCount / 2).after(this.$posterItems.eq(0).clone());
+            this.$posterItems = this.$poster_list.children();
+            this.posterCount = this.$posterItems.length;
+        }
+
         this.$posterFirstItem = this.$posterItems.first();
         this.$posterLastItem = this.$posterItems.last();
-        this.posterCount = this.$posterItems.length;
         this.rotateFinish = true;
         //默认配置参数
         this.setting = {
@@ -22,6 +28,8 @@
             "posterWidth" : 800,         //图片的宽度
             "posterHeight" : 347,        //图片的高度
             "scale" : 0.9,               //缩放比例
+            "autoPlay" : true,
+            "delay" : 2000,
             "speed" : 500,
             "verticalAlign" : "middle"
         };
@@ -46,6 +54,16 @@
                 that.carouselRotate('right');
            }
         });
+
+        //自动播放
+        if(this.setting.autoPlay) {
+            this.autoPlay();
+            this.$poster.hover(function () {
+                window.clearInterval(that.timer);
+            }, function () {
+                that.autoPlay();
+            });
+        }
     }
 
     /**
@@ -184,7 +202,7 @@
                     opacity : opacity,
                     left : left,
                     top : top
-                }, function () {
+                }, that.setting.speed, function () {
                     that.rotateFinish = true;
                 });
             });
@@ -209,7 +227,7 @@
                     opacity : opacity,
                     left : left,
                     top : top
-                    }, function () {
+                    }, that.setting.speed, function () {
                         that.rotateFinish = true;
                     });
             });
@@ -219,7 +237,16 @@
         }
     };
 
-    
+    /**
+     * 自动播放函数
+    * 
+    */
+    Carousel.prototype.autoPlay = function () {
+        var that = this;
+        this.timer = window.setInterval(function () {
+            that.$nextBtn.click();
+        }, this.setting.delay);
+    }
     /**
      * 执行旋转木马类构造函数，实例化每一个旋转木马组件
      * 
