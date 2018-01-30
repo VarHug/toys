@@ -8,8 +8,7 @@ var Local = function () {
             gameDiv : document.getElementById('game'),
             nextDiv : document.getElementById('next')
         };
-        var tetris = new Tetris();
-        tetris.init(doms);
+        Tetris.init(doms);
     };
 
     //导出API

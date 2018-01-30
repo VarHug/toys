@@ -1,4 +1,4 @@
-// (function($) {
+(function() {
     const NONE = 0;   //空白
     const DONE = 1;   //下落完成
     const CUR = 2;    //正在下落
@@ -7,10 +7,11 @@
      * 俄罗斯方块类
      * 
      */
-    var Tetris = function () {
+    var Tetris = function (doms) {
         //DOM元素
-        this.gameDiv;
-        this.nextDiv;
+        this.gameDiv = doms.gameDiv; //document.getElementById('game')
+        this.nextDiv = doms.nextDiv; //document.getElementById('next')
+
         //游戏矩阵
         this.gameData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,20 +36,32 @@
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
         //当前方块
-        this.cur;
+        this.cur = new Square();
         //下一个方块
-        this.next;
+        this.next = new Square();
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
+
+        this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
+        this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
+        this.cur.origin.x = 10;
+        this.cur.origin.y = 5;
+        // for(let i = 0; i < this.cur.data.length; i++) {
+        //     for(let j = 0; j < this.cur.data[0].length; j++) {
+        //         this.gameData[this.cur.origin.x + i][this.cur.origin.y + j] = this.cur.data[i][j];
+        //     }
+        // }
+        this.refreshDiv(this.gameData, this.gameDivs);
+        this.refreshDiv(this.next.data, this.nextDivs);
     };
 
     /**
      * 初始化区域
      * 
-     * @param {jQuery对象} container 
+     * @param {dom对象} container 
      * @param {num[][]} data 
-     * @param {jQuery[][]} divs 
+     * @param {dom[][]} divs 
      */
     Tetris.prototype.initDiv = function (container, data, divs) {
         for(let i = 0, dataColumn = data.length; i < dataColumn; i++) {
@@ -64,6 +77,7 @@
             divs.push(div);
         }
     }
+
     /**
      * 刷新区域
      * 
@@ -88,16 +102,9 @@
      * 
      * @param {jQuery} doms 
      */
-    Tetris.prototype.init = function (doms) {
-        gameDiv = doms.gameDiv;
-        nextDiv = doms.nextDiv;
-        cur = new Square();
-        next = new Square();
-        this.initDiv(gameDiv, this.gameData, this.gameDivs);
-        this.initDiv(nextDiv, next.data, this.nextDivs);
-        this.refreshDiv(this.gameData, this.gameDivs);
-        this.refreshDiv(next.data, this.nextDivs);
+    Tetris.init = function (doms) {
+        new this(doms);
     }
 
     window['Tetris'] = Tetris;
-// })(jQuery);
+})();
