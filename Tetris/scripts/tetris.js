@@ -48,8 +48,8 @@
         this.bindKeyEvent();
         this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
         this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
-        this.cur.origin.x = 10;
-        this.cur.origin.y = 5;
+        this.cur.origin.x = 0;
+        this.cur.origin.y = 7;
         this.setData();
         this.refreshDiv(this.gameData, this.gameDivs);
         this.refreshDiv(this.next.data, this.nextDivs);
@@ -104,9 +104,9 @@
     Tetris.prototype.setData = function () {
         for(let i = 0; i < this.cur.data.length; i++) {
             for(let j = 0; j < this.cur.data[0].length; j++) {
-                //if (this.check(this.cur.origin, i, j)) {
+                if (this.check(this.cur.origin, i, j)) {  //防止扩充游戏区域
                     this.gameData[this.cur.origin.x + i][this.cur.origin.y + j] = this.cur.data[i][j];
-                //}
+                }
             }
         }
     };
@@ -118,9 +118,9 @@
     Tetris.prototype.clearData = function () {
         for(let i = 0; i < this.cur.data.length; i++) {
             for(let j = 0; j < this.cur.data[0].length; j++) {
-                //if(this.check(this.cur.origin, i, j)) {
+                if(this.check(this.cur.origin, i, j)) {  //防止扩充游戏区域
                     this.gameData[this.cur.origin.x + i][this.cur.origin.y + j] = NONE;
-                //}
+                }
             }
         }
     }
@@ -146,7 +146,25 @@
         } else {
             return true;
         }
-    }
+    };
+    /**
+     * 做碰撞检测
+     * 
+     * @param {object} test 
+     * @returns 
+     */
+    Tetris.prototype.doCheck = function (test) {
+        for (let i = 0, dataRow = this.cur.data.length; i < dataRow; i++) {
+            for (let j = 0, dataCol = this.cur.data[0].length; j < dataCol; j++) {
+                if (this.cur.data[i][j] !== 0) {
+                    if(!this.check(test, i, j)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
 
     /**
      * 绑定键盘事件
@@ -156,17 +174,51 @@
         var that = this;
         document.onkeydown = function (e) {
             if (e.keyCode === 38) { //up
-
-            } else if (e.keyCode === 39) { //right
-
+                that.rotate();
+            } else if (e.keyCode === 37) { //left
+                that.left();
             } else if (e.keyCode === 40) { //down
                 that.down();
-            } else if (e.keyCode === 37) { //left
-                
+            } else if (e.keyCode === 39) { //right
+                that.right();
             } else if (e.keyCode === 32) { //space
                 
             }
         };
+    };
+
+    /**
+     * 左移
+     * 
+     */
+    Tetris.prototype.left = function () {
+        var test = {
+            x : this.cur.origin.x,
+            y : this.cur.origin.y - 1
+        };
+        if (this.doCheck(test)) {
+            this.clearData();
+            this.cur.origin.y -= 1;
+            this.setData();
+            this.refreshDiv(this.gameData, this.gameDivs);
+        }
+    };
+
+    /**
+     * 右移
+     * 
+     */
+    Tetris.prototype.right = function () {
+        var test = {
+            x : this.cur.origin.x,
+            y : this.cur.origin.y + 1
+        };
+        if (this.doCheck(test)) {
+            this.clearData();
+            this.cur.origin.y += 1;
+            this.setData();
+            this.refreshDiv(this.gameData, this.gameDivs);
+        }
     };
 
     /**
@@ -178,18 +230,47 @@
             x : this.cur.origin.x + 1,
             y : this.cur.origin.y
         };
-        for (let i = 0, dataRow = this.cur.data.length; i < dataRow; i++) {
-            for (let j = 0, dataCol = this.cur.data[0].length; j < dataCol; j++) {
-                if(!this.check(test, i, j)) {
-                    return;
+        if (this.doCheck(test)) {
+            this.clearData();
+            this.cur.origin.x += 1;
+            this.setData();
+            this.refreshDiv(this.gameData, this.gameDivs);
+        }
+    };
+
+    /**
+     * 旋转
+     * 
+     */
+    Tetris.prototype.rotate = function () {
+        if (this.rotateCheck()) {
+            this.cur.dur = (this.cur.dur + 1) % 4;
+            this.cur.data = this.cur.rotates[this.cur.dur].slice();
+            this.clearData();
+            this.setData();
+            this.refreshDiv(this.gameData, this.gameDivs);
+        }
+    }
+
+    /**
+     * 旋转检测
+     * 
+     * @returns 
+     */
+    Tetris.prototype.rotateCheck = function () {
+        var testdur = (this.cur.dur + 1) % 4,
+            test = this.cur.rotates[testdur].slice();
+        for (let i = 0, dataRow = test.length; i < dataRow; i++) {
+            for (let j = 0, dataCol = test[0].length; j < dataCol; j++) {
+                if (test[i][j] !== 0) {
+                    if(!this.check(this.cur.origin, i, j)) {
+                        return false;
+                    }
                 }
             }
         }
-        this.clearData();
-        this.cur.origin.x += 1;
-        this.setData();
-        this.refreshDiv(this.gameData, this.gameDivs);
-    };
+        return true;
+    }
 
     /**
      * 初始化
