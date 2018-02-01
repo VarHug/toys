@@ -38,9 +38,9 @@
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
         //当前方块
-        this.cur = new Square();
+        this.cur = SquareFactory.prototype.make(2);
         //下一个方块
-        this.next = new Square();
+        this.next = SquareFactory.prototype.make(2);
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
@@ -48,8 +48,6 @@
         this.bindKeyEvent();
         this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
         this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
-        this.cur.origin.x = 0;
-        this.cur.origin.y = 7;
         this.setData();
         this.refreshDiv(this.gameData, this.gameDivs);
         this.refreshDiv(this.next.data, this.nextDivs);
