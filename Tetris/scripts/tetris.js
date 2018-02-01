@@ -182,7 +182,7 @@
             } else if (e.keyCode === 39) { //right
                 that.right();
             } else if (e.keyCode === 32) { //space
-                
+                that.fall();
             }
         };
     };
@@ -235,6 +235,9 @@
             this.cur.origin.x += 1;
             this.setData();
             this.refreshDiv(this.gameData, this.gameDivs);
+            return true;
+        } else {
+            return false;
         }
     };
 
@@ -271,6 +274,16 @@
         }
         return true;
     }
+
+    /**
+     * 坠落
+     * 
+     */
+    Tetris.prototype.fall = function () {
+        while (this.down()) {
+            
+        };
+    };
 
     /**
      * 初始化
