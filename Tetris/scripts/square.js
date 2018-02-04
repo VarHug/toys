@@ -271,7 +271,14 @@ var SquareFactory = function () {
     
 };
 
-SquareFactory.prototype.make = function (index) {
+/**
+ * 生成方块
+ * 
+ * @param {number} index 方块种类序号(0 - 6)
+ * @param {number} num   方块状态序号(0 - 3)
+ * @returns 
+ */
+SquareFactory.prototype.make = function (index, num) {
     var s;
     index++;
     switch (index) {
@@ -301,6 +308,8 @@ SquareFactory.prototype.make = function (index) {
     }
     s.origin.x = 0;
     s.origin.y = 3;
-    s.data = s.rotates[0];
+    num = num % 4;
+    s.data = s.rotates[num];
+    s.dur = num;
     return s;
 };

@@ -2,16 +2,19 @@
     const NONE = 0;   //空白
     const DONE = 1;   //下落完成
     const CUR = 2;    //正在下落
+    const INTERVAL = 300;  //下落时间间隔
 
     /**
      * 俄罗斯方块类
      * 
      */
     var Tetris = function (doms) {
+        var that = this;
         //DOM元素
         this.gameDiv = doms.gameDiv; //document.getElementById('game')
         this.nextDiv = doms.nextDiv; //document.getElementById('next')
-
+        this.stop = document.getElementById('stop');
+        
         //游戏矩阵
         this.gameData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -38,9 +41,9 @@
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
         //当前方块
-        this.cur = SquareFactory.prototype.make(2);
+        this.cur = SquareFactory.prototype.make(2, 2);
         //下一个方块
-        this.next = SquareFactory.prototype.make(2);
+        this.next = SquareFactory.prototype.make(2, 3);
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
@@ -51,6 +54,37 @@
         this.setData();
         this.refreshDiv(this.gameData, this.gameDivs);
         this.refreshDiv(this.next.data, this.nextDivs);
+        
+        var timer = null;
+        var move = function () {
+            if (!that.down()) {
+                that.fixed();
+                that.performNext(generateType(), generateDir());
+            }
+        }
+        timer = setInterval(move, INTERVAL);
+
+        this.stop.onclick = function () {
+            clearInterval(timer);
+        };
+    };
+
+    /**
+     * 生成一个方块种类
+     * 
+     * @returns 0 - 6
+     */
+    var generateType = function () {
+        return Math.random() * 7 | 0;
+    };
+
+    /**
+     * 生成一个方块方向
+     * 
+     * @returns 0 - 3
+     */
+    var generateDir = function () {
+        return Math.random() * 4 | 0;
     };
 
     /**
@@ -237,6 +271,37 @@
         } else {
             return false;
         }
+    };
+
+    /**
+     * 方块下落到地步固定（变色）
+     * 
+     */
+    Tetris.prototype.fixed = function () {
+        for (let i = 0; i < this.cur.data.length; i++) {
+            for (let j = 0; j < this.cur.data[0].length; j++) {
+                if (this.check(this.cur.origin, i, j)) {
+                    if (this.gameData[this.cur.origin.x + i][this.cur.origin.y + j] === CUR) {
+                        this.gameData[this.cur.origin.x + i][this.cur.origin.y + j] = DONE;
+                    }
+                }
+            }
+        }
+        this.refreshDiv(this.gameData, this.gameDivs);
+    };
+
+    /**
+     * 使用下一个方块
+     * 
+     * @param {number} type 
+     * @param {number} dir 
+     */
+    Tetris.prototype.performNext = function (type, dir) {
+        this.cur = this.next;
+        this.setData();
+        this.refreshDiv(this.gameData, this.gameDivs);
+        this.next = SquareFactory.prototype.make(type, dir);
+        this.refreshDiv(this.next.data, this.nextDivs);
     };
 
     /**
