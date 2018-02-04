@@ -59,6 +59,7 @@
         var move = function () {
             if (!that.down()) {
                 that.fixed();
+                that.clearRow();
                 that.performNext(generateType(), generateDir());
             }
         }
@@ -346,6 +347,31 @@
         while (this.down()) {
             
         };
+    };
+
+    /**
+     * 消行
+     * 
+     */
+    Tetris.prototype.clearRow = function () {
+        for (let i = this.gameData.length - 1; i >= 0; i--) {
+            var clear = true;
+            for (let j = 0; j < this.gameData[0].length; j++) {
+                if (this.gameData[i][j] !== DONE) {
+                    clear = false;
+                    break;
+                }
+            }
+            if (clear) {
+                for (let m = i; m > 0; m--) {
+                    this.gameData[m] = this.gameData[m - 1].slice();
+                }
+                for (let n = 0; n < this.gameData[0].length; n++) {
+                    this.gameData[0][n] = NONE;
+                }
+                i++;    //所有行下一了，判断被消掉的上一行
+            }
+        }  
     };
 
     /**
