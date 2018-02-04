@@ -55,18 +55,23 @@
         this.refreshDiv(this.gameData, this.gameDivs);
         this.refreshDiv(this.next.data, this.nextDivs);
         
-        var timer = null;
+        this.timer = null;
         var move = function () {
             if (!that.down()) {
                 that.fixed();
                 that.clearRow();
-                that.performNext(generateType(), generateDir());
+                if (that.checkGameOver()) {
+                    that.stopGame();
+                    alert('游戏结束');
+                } else {
+                    that.performNext(generateType(), generateDir());
+                }
             }
         }
-        timer = setInterval(move, INTERVAL);
+        this.timer = setInterval(move, INTERVAL);
 
         this.stop.onclick = function () {
-            clearInterval(timer);
+            clearInterval(that.timer);
         };
     };
 
@@ -372,6 +377,28 @@
                 i++;    //所有行下一了，判断被消掉的上一行
             }
         }  
+    };
+
+    /**
+     * 判断游戏是否Over
+     * 
+     * @returns boolean
+     */
+    Tetris.prototype.checkGameOver = function () {
+        for (let i = 0; i < this.gameData[0].length; i++) {
+            if (this.gameData[1][i] === DONE) {
+                return true;
+            }
+        }
+        return false;    
+    };
+
+    Tetris.prototype.stopGame = function () {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        document.onkeydown = null;
     };
 
     /**
