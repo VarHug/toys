@@ -14,7 +14,8 @@ var Local = function () {
             stopDiv : $('stop'),
             timeDiv : $('time'),
             scoreDiv : $('score'),
-            resultDiv : $('gameover')
+            resultDiv : $('gameover'),
+            restartDiv : $('restart')
         };
         Tetris.init(doms);
     };

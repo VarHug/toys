@@ -18,6 +18,7 @@
         this.timeDiv = doms.timeDiv;
         this.scoreDiv = doms.scoreDiv;
         this.resultDiv = doms.resultDiv;
+        this.restartDiv = doms.restartDiv;
 
         //时间、分数相关
         this.timeCount = 0;
@@ -49,6 +50,8 @@
         ];
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
+        this.bindKeyEvent();
+        
         //当前方块
         this.cur = SquareFactory.prototype.make(generateType(), generateDir());
         //下一个方块
@@ -57,12 +60,12 @@
         this.gameDivs = [];
         this.nextDivs = [];
 
-        this.bindKeyEvent();
-        this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
-        this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
-        this.setData();
-        this.refreshDiv(this.gameData, this.gameDivs);
-        this.refreshDiv(this.next.data, this.nextDivs);
+        // this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
+        // this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
+        // this.setData();
+        // this.refreshDiv(this.gameData, this.gameDivs);
+        // this.refreshDiv(this.next.data, this.nextDivs);
+        this.start();
         
         this.timer = null;
         var move = function () {
@@ -85,6 +88,48 @@
 
         this.stopDiv.onclick = function () {
             clearInterval(that.timer);
+        };
+
+        this.restartDiv.onclick = function () {
+            var result = confirm('您确定要重新开始么');
+            if (!result) {
+                return;
+            }
+            that.timeCount = 0;
+            that.time = 0;
+            that.score = 0;
+            that.timeDiv.innerHTML = 0;
+            that.scoreDiv.innerHTML = 0;
+            that.gameData = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            //当前方块
+            that.cur = SquareFactory.prototype.make(generateType(), generateDir());
+            //下一个方块
+            that.next = SquareFactory.prototype.make(generateType(), generateDir());
+            //divs
+            that.gameDivs = [];
+            that.nextDivs = [];
+            that.start();
         };
     };
 
@@ -475,6 +520,18 @@
             this.timer = null;
         }
         document.onkeydown = null;
+    };
+
+    /**
+     * 游戏开始
+     * 
+     */
+    Tetris.prototype.start = function () {
+        this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
+        this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
+        this.setData();
+        this.refreshDiv(this.gameData, this.gameDivs);
+        this.refreshDiv(this.next.data, this.nextDivs);
     };
 
     /**
