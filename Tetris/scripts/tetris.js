@@ -2,7 +2,8 @@
     const NONE = 0;   //空白
     const DONE = 1;   //下落完成
     const CUR = 2;    //正在下落
-    const INTERVAL = 300;  //下落时间间隔
+    const INTERVAL = 200;  //下落时间间隔
+
 
     /**
      * 俄罗斯方块类
@@ -13,7 +14,15 @@
         //DOM元素
         this.gameDiv = doms.gameDiv; //document.getElementById('game')
         this.nextDiv = doms.nextDiv; //document.getElementById('next')
-        this.stop = document.getElementById('stop');
+        this.stopDiv = doms.stopDiv;
+        this.timeDiv = doms.timeDiv;
+        this.scoreDiv = doms.scoreDiv;
+        this.resultDiv = doms.resultDiv;
+
+        //时间、分数相关
+        this.timeCount = 0;
+        this.time = 0;
+        this.score = 0;
         
         //游戏矩阵
         this.gameData = [
@@ -41,9 +50,9 @@
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
         //当前方块
-        this.cur = SquareFactory.prototype.make(2, 2);
+        this.cur = SquareFactory.prototype.make(generateType(), generateDir());
         //下一个方块
-        this.next = SquareFactory.prototype.make(2, 3);
+        this.next = SquareFactory.prototype.make(generateType(), generateDir());
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
@@ -57,11 +66,15 @@
         
         this.timer = null;
         var move = function () {
+            that.timeCount++;
+            that.timeDiv.innerHTML = that.setTime();
             if (!that.down()) {
                 that.fixed();
-                that.clearRow();
+                var line = that.clearRow();
+                that.scoreDiv.innerHTML =  that.addScore(line);
                 if (that.checkGameOver()) {
                     that.stopGame();
+                    that.resultDiv.innerHTML = that.gameResult(false);
                     alert('游戏结束');
                 } else {
                     that.performNext(generateType(), generateDir());
@@ -70,7 +83,7 @@
         }
         this.timer = setInterval(move, INTERVAL);
 
-        this.stop.onclick = function () {
+        this.stopDiv.onclick = function () {
             clearInterval(that.timer);
         };
     };
@@ -92,6 +105,7 @@
     var generateDir = function () {
         return Math.random() * 4 | 0;
     };
+
 
     /**
      * 初始化区域
@@ -359,6 +373,7 @@
      * 
      */
     Tetris.prototype.clearRow = function () {
+        var line = 0;
         for (let i = this.gameData.length - 1; i >= 0; i--) {
             var clear = true;
             for (let j = 0; j < this.gameData[0].length; j++) {
@@ -368,6 +383,7 @@
                 }
             }
             if (clear) {
+                line++;
                 for (let m = i; m > 0; m--) {
                     this.gameData[m] = this.gameData[m - 1].slice();
                 }
@@ -376,7 +392,49 @@
                 }
                 i++;    //所有行下一了，判断被消掉的上一行
             }
-        }  
+        }
+        return line;  
+    };
+
+    /**
+     * 计时函数
+     * 
+     * @returns 
+     */
+    Tetris.prototype.setTime = function () {
+        this.timeCount %= 5;
+        if (!this.timeCount) {
+            this.time++;    
+        }
+        return this.time;    
+    };
+
+    /**
+     * 加分函数
+     * 
+     * @param {number} line 
+     * @returns {number} score
+     */
+    Tetris.prototype.addScore = function (line) {
+        var s = 0;
+        switch (line) {
+            case 1:
+                s += 10;
+                break;
+            case 2:
+                s += 30;
+                break;
+            case 3:
+                s += 60;
+                break;
+            case 4:
+                s += 100;
+                break;
+            default:
+                break;
+        }
+        this.score += s;
+        return this.score;
     };
 
     /**
@@ -392,7 +450,25 @@
         }
         return false;    
     };
+    
+    /**
+     * 游戏输赢结果
+     * 
+     * @param {boolean} result 
+     * @returns 
+     */
+    Tetris.prototype.gameResult = function (result) {
+        if (result) {
+            return 'You win';
+        } else {
+            return 'You lose';
+        }
+    };
 
+    /**
+     * 停止游戏
+     * 
+     */
     Tetris.prototype.stopGame = function () {
         if (this.timer) {
             clearInterval(this.timer);

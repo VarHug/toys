@@ -1,14 +1,20 @@
 
 var Local = function () {
-
+    var $ = function (ele) {
+        return document.getElementById(ele);
+    };
     /**
      * 开始
      * 
      */
     var start = function () {
         var doms = {
-            gameDiv : document.getElementById('game'),
-            nextDiv : document.getElementById('next')
+            gameDiv : $('game'),
+            nextDiv : $('next'),
+            stopDiv : $('stop'),
+            timeDiv : $('time'),
+            scoreDiv : $('score'),
+            resultDiv : $('gameover')
         };
         Tetris.init(doms);
     };
