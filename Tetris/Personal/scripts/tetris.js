@@ -88,6 +88,7 @@
 
         this.stopDiv.onclick = function () {
             clearInterval(that.timer);
+            that.timer = null;
         };
 
         this.restartDiv.onclick = function () {
@@ -129,6 +130,12 @@
             //divs
             that.gameDivs = [];
             that.nextDivs = [];
+            if (!that.timer) {
+                that.timer = setInterval(move, INTERVAL);
+            }
+            if (document.onkeydown === null) {
+                that.bindKeyEvent();
+            }
             that.start();
         };
     };
