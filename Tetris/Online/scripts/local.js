@@ -9,15 +9,15 @@ var Local = function () {
      */
     var start = function () {
         var doms = {
-            gameDiv : $('game'),
-            nextDiv : $('next'),
-            stopDiv : $('stop'),
-            timeDiv : $('time'),
-            scoreDiv : $('score'),
-            resultDiv : $('gameover'),
-            restartDiv : $('restart')
+            gameDiv : $('local_game'),
+            nextDiv : $('local_next'),
+            stopDiv : $('local_stop'),
+            timeDiv : $('local_time'),
+            scoreDiv : $('local_score'),
+            resultDiv : $('local_gameover'),
+            restartDiv : $('local_restart')
         };
-        Tetris.init(doms);
+        Tetris.init(doms, 'local');
     };
 
     //导出API

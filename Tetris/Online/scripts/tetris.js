@@ -9,7 +9,7 @@
      * 俄罗斯方块类
      * 
      */
-    var Tetris = function (doms) {
+    var Tetris = function (doms, type) {
         var that = this;
         //DOM元素
         this.gameDiv = doms.gameDiv; //document.getElementById('game')
@@ -19,6 +19,7 @@
         this.scoreDiv = doms.scoreDiv;
         this.resultDiv = doms.resultDiv;
         this.restartDiv = doms.restartDiv;
+        this.type = type;
 
         //时间、分数相关
         this.timeCount = 0;
@@ -50,7 +51,9 @@
         ];
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
-        this.bindKeyEvent();
+        if (this.type === 'local') {
+            this.bindKeyEvent();
+        }
         
         //当前方块
         this.cur = SquareFactory.prototype.make(generateType(), generateDir());
@@ -59,12 +62,6 @@
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
-
-        // this.initDiv(this.gameDiv, this.gameData, this.gameDivs);
-        // this.initDiv(this.nextDiv, this.next.data, this.nextDivs);
-        // this.setData();
-        // this.refreshDiv(this.gameData, this.gameDivs);
-        // this.refreshDiv(this.next.data, this.nextDivs);
         this.start();
         
         this.timer = null;
@@ -78,7 +75,9 @@
                 if (that.checkGameOver()) {
                     that.stopGame();
                     that.resultDiv.innerHTML = that.gameResult(false);
-                    alert('游戏结束');
+                    if (that.type === 'local') {
+                        alert('游戏结束');
+                    }
                 } else {
                     that.performNext(generateType(), generateDir());
                 }
@@ -546,7 +545,9 @@
             clearInterval(this.timer);
             this.timer = null;
         }
-        document.onkeydown = null;
+        if (this.type === 'local') {
+            document.onkeydown = null;
+        }
     };
 
     /**
@@ -585,8 +586,8 @@
      * 
      * @param {jQuery} doms 
      */
-    Tetris.init = function (doms) {
-        new this(doms);
+    Tetris.init = function (doms, type) {
+        new this(doms, type);
     };
 
 
