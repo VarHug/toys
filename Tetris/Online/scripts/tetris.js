@@ -158,6 +158,23 @@
         return Math.random() * 4 | 0;
     };
 
+    /**
+     * 随机生成干扰行
+     * 
+     * @param {number} lineNumber 
+     */
+    var generateBottomLine = function (lineNumber) {
+        var lines = [];
+        for (let i = 0; i < lineNumber; i++) {
+            let line = [];
+            for (let j = 0; j < 10; j++) {
+                line.push(Math.random() * 2 | 0);
+            }
+            lines.push(line);
+        }
+        return lines;
+    };
+
 
     /**
      * 初始化区域
@@ -456,7 +473,10 @@
     Tetris.prototype.setTime = function () {
         this.timeCount %= 5;
         if (!this.timeCount) {
-            this.time++;    
+            this.time++;
+            if (this.time % 10 === 0) {
+                this.addTailLines(generateBottomLine(1));
+            }    
         }
         return this.time;    
     };
@@ -539,6 +559,25 @@
         this.setData();
         this.refreshDiv(this.gameData, this.gameDivs);
         this.refreshDiv(this.next.data, this.nextDivs);
+    };
+
+    /**
+     * 增加干扰行函数
+     * 
+     * @param {number[][]} lines 
+     */
+    Tetris.prototype.addTailLines = function (lines) {
+        for (let i = 0; i < this.gameData.length - lines.length; i++) {
+            this.gameData[i] = this.gameData[i + lines.length].slice();
+        }
+        for (let i = 0; i < lines.length; i++) {
+            this.gameData[this.gameData.length - lines.length + i] = lines[i].slice();
+        }
+        this.cur.origin.x -= lines.length;
+        if (this.cur.origin.x < 0) {
+            this.cur.origin.x = 0;
+        }
+        this.refreshDiv(this.gameData, this.gameDivs);
     };
 
     /**
