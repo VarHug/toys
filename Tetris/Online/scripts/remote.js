@@ -1,10 +1,17 @@
 
-var Remote = function () {
+var Remote = function (socket) {
     var $ = function (ele) {
         return document.getElementById(ele);
     };
+
+    var bindEvents = function () {
+        socket.on('init', function (data) {
+            start(data);
+        });
+    };
+
     //开始方法
-    var start = function () {
+    var start = function (squareInfo) {
         var doms = {
             gameDiv : $('remote_game'),
             nextDiv : $('remote_next'),
@@ -14,8 +21,8 @@ var Remote = function () {
             resultDiv : $('remote_gameover'),
             restartDiv : $('remote_restart')
         };
-        Tetris.init(doms, 'remote');
+        Tetris.init(doms, 'remote', squareInfo);
     };    
-    //导出API
-    this.start = start;
+
+    bindEvents();
 };

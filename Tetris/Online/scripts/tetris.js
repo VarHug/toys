@@ -9,11 +9,11 @@
      * 俄罗斯方块类
      * 
      */
-    var Tetris = function (doms, type) {
+    var Tetris = function (doms, type, squareInfo) {
         var that = this;
         //DOM元素
-        this.gameDiv = doms.gameDiv; //document.getElementById('game')
-        this.nextDiv = doms.nextDiv; //document.getElementById('next')
+        this.gameDiv = doms.gameDiv; 
+        this.nextDiv = doms.nextDiv; 
         this.stopDiv = doms.stopDiv;
         this.timeDiv = doms.timeDiv;
         this.scoreDiv = doms.scoreDiv;
@@ -51,21 +51,22 @@
         ];
         this.gameDataRow = this.gameData.length;
         this.gameDataCol = this.gameData[0].length;
+
+        //当前方块
+        this.cur = SquareFactory.prototype.make(squareInfo.curType, squareInfo.curDir);
+        //下一个方块
+        this.next = SquareFactory.prototype.make(squareInfo.nextType, squareInfo.nextDir);
         if (this.type === 'local') {
             this.bindKeyEvent();
+            this.timer = null;
+            this.timer = setInterval(move, INTERVAL);
         }
-        
-        //当前方块
-        this.cur = SquareFactory.prototype.make(generateType(), generateDir());
-        //下一个方块
-        this.next = SquareFactory.prototype.make(generateType(), generateDir());
         //divs
         this.gameDivs = [];
         this.nextDivs = [];
         this.start();
-        
-        this.timer = null;
-        var move = function () {
+            
+        function move() {
             that.timeCount++;
             that.timeDiv.innerHTML = that.setTime();
             if (!that.down()) {
@@ -83,8 +84,7 @@
                 }
             }
         }
-        this.timer = setInterval(move, INTERVAL);
-
+        
         this.stopDiv.onclick = function () {
             clearInterval(that.timer);
             that.timer = null;
@@ -586,8 +586,8 @@
      * 
      * @param {jQuery} doms 
      */
-    Tetris.init = function (doms, type) {
-        new this(doms, type);
+    Tetris.init = function (doms, type, squareInfo) {
+        new this(doms, type, squareInfo);
     };
 
 
