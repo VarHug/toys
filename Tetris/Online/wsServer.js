@@ -13,6 +13,16 @@ var socketMap = {};
 
 app.listen(PORT);
 
+var bindListener = function (socket, event) {
+    socket.on(event, function (data) {
+        if (socket.clientNum % 2 === 0) {
+            socketMap[socket.clientNum - 1].emit(event, data); 
+        } else {
+            socketMap[socket.clientNum + 1].emit(event, data);
+        }
+    });
+};
+
 //客户端连接
 io.on('connection', function (socket) {
     clientCount++;
@@ -26,13 +36,15 @@ io.on('connection', function (socket) {
         socketMap[(clientCount - 1)].emit('start');
     }
     
-    socket.on('init', function (data) {
-        if (socket.clientNum % 2 === 0) {
-            socketMap[socket.clientNum - 1].emit('init', data); 
-        } else {
-            socketMap[socket.clientNum + 1].emit('init', data);
-        }
-    });
+    bindListener(socket, 'init');
+    bindListener(socket, 'next');
+    bindListener(socket, 'rotate');
+    bindListener(socket, 'right');
+    bindListener(socket, 'left');
+    bindListener(socket, 'down');
+    bindListener(socket, 'fall');
+    bindListener(socket, 'fixed');
+    bindListener(socket, 'line');
 
     //客户端断开
     socket.on('disconnect', function () {

@@ -1,4 +1,6 @@
-(function() {
+// import { Socket } from "net";
+
+// (function() {
     const NONE = 0;   //空白
     const DONE = 1;   //下落完成
     const CUR = 2;    //正在下落
@@ -71,8 +73,10 @@
             that.timeDiv.innerHTML = that.setTime();
             if (!that.down()) {
                 that.fixed();
+                socket.emit('fixed');
                 var line = that.clearRow();
                 that.scoreDiv.innerHTML =  that.addScore(line);
+                socket.emit('line', line);
                 if (that.checkGameOver()) {
                     that.stopGame();
                     that.resultDiv.innerHTML = that.gameResult(false);
@@ -80,8 +84,13 @@
                         alert('游戏结束');
                     }
                 } else {
-                    that.performNext(generateType(), generateDir());
+                    var t = generateType();
+                    var d = generateDir();
+                    that.performNext(t, d);
+                    socket.emit('next', {type: t, dir: d});
                 }
+            } else {
+                socket.emit('down');
             }
         }
         
@@ -295,14 +304,19 @@
         document.onkeydown = function (e) {
             if (e.keyCode === 38) { //up
                 that.rotate();
+                socket.emit('rotate');
             } else if (e.keyCode === 37) { //left
                 that.left();
+                socket.emit('left');
             } else if (e.keyCode === 40) { //down
                 that.down();
+                socket.emit('down');
             } else if (e.keyCode === 39) { //right
                 that.right();
+                socket.emit('right');
             } else if (e.keyCode === 32) { //space
                 that.fall();
+                socket.emit('fall');
             }
         };
     };
@@ -592,4 +606,4 @@
 
 
     window['Tetris'] = Tetris;
-})();
+// })();

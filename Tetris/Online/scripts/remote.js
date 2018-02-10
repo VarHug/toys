@@ -21,7 +21,40 @@ var Remote = function (socket) {
             resultDiv : $('remote_gameover'),
             restartDiv : $('remote_restart')
         };
-        Tetris.init(doms, 'remote', squareInfo);
+        var remoteGame = new Tetris(doms, 'remote', squareInfo);
+
+        socket.on('next' ,function (data) {
+            remoteGame.performNext(data.type, data.dir);
+        });
+
+        socket.on('rotate' ,function (data) {
+            remoteGame.rotate();
+        });
+
+        socket.on('left' ,function (data) {
+            remoteGame.left();
+        });
+
+        socket.on('right' ,function (data) {
+            remoteGame.right();
+        });
+
+        socket.on('down' ,function (data) {
+            remoteGame.down();
+        });
+
+        socket.on('fall' ,function (data) {
+            remoteGame.fall();
+        });
+
+        socket.on('fixed' ,function (data) {
+            remoteGame.fixed();
+        });
+
+        socket.on('line' ,function (data) {
+            remoteGame.clearRow();
+            remoteGame.addScore(data);
+        });
     };    
 
     bindEvents();
