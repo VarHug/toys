@@ -55,6 +55,14 @@ var Remote = function (socket) {
             remoteGame.clearRow();
             remoteGame.addScore(data);
         });
+
+        socket.on('time' ,function (data) {
+            remoteGame.setTime(data);
+        });
+
+        socket.on('lose' ,function (data) {
+            remoteGame.gameResult(true);
+        });        
     };    
 
     bindEvents();

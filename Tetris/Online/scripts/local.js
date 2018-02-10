@@ -48,4 +48,8 @@ var Local = function (socket) {
         $('waiting').innerHTML = '';
         start();
     });
+
+    socket.on('lose', function (data) {
+        
+    });
 }

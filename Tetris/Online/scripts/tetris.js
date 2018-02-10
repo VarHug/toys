@@ -69,13 +69,12 @@
         this.start();
             
         function move() {
-            that.timeCount++;
-            that.timeDiv.innerHTML = that.setTime();
+            that.timeFun();
             if (!that.down()) {
                 that.fixed();
                 socket.emit('fixed');
                 var line = that.clearRow();
-                that.scoreDiv.innerHTML =  that.addScore(line);
+                that.addScore(line);
                 socket.emit('line', line);
                 if (that.checkGameOver()) {
                     that.stopGame();
@@ -479,19 +478,26 @@
     };
 
     /**
-     * 计时函数
+     * 时间函数
+     * 
+     */
+    Tetris.prototype.timeFun = function () {
+        this.timeCount++;
+        if (this.timeCount === 5) {
+            this.timeCount = 0;
+            this.time++;
+            this.setTime(this.time)
+            // var t = this.time;
+            socket.emit('time', this.time);
+        }
+    };
+    /**
+     * 设置时间函数
      * 
      * @returns 
      */
-    Tetris.prototype.setTime = function () {
-        this.timeCount %= 5;
-        if (!this.timeCount) {
-            this.time++;
-            if (this.time % 10 === 0) {
-                this.addTailLines(generateBottomLine(1));
-            }    
-        }
-        return this.time;    
+    Tetris.prototype.setTime = function (time) {
+        this.timeDiv.innerHTML = time;
     };
 
     /**
@@ -519,7 +525,7 @@
                 break;
         }
         this.score += s;
-        return this.score;
+        this.scoreDiv.innerHTML = this.score;
     };
 
     /**

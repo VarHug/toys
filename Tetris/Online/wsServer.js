@@ -45,6 +45,8 @@ io.on('connection', function (socket) {
     bindListener(socket, 'fall');
     bindListener(socket, 'fixed');
     bindListener(socket, 'line');
+    bindListener(socket, 'time');
+    bindListener(socket, 'lose');
 
     //客户端断开
     socket.on('disconnect', function () {
