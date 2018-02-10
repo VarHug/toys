@@ -78,7 +78,9 @@
                 socket.emit('line', line);
                 if (that.checkGameOver()) {
                     that.stopGame();
-                    that.resultDiv.innerHTML = that.gameResult(false);
+                    that.gameResult(false);
+                    document.getElementById('remote_gameover').innerHTML = 'You win';
+                    socket.emit('lose');
                     if (that.type === 'local') {
                         alert('游戏结束');
                     }
@@ -92,59 +94,13 @@
                 socket.emit('down');
             }
         }
-        
-        this.stopDiv.onclick = function () {
-            clearInterval(that.timer);
-            that.timer = null;
-        };
 
-        this.restartDiv.onclick = function () {
-            var result = confirm('您确定要重新开始么');
-            if (!result) {
-                return;
-            }
-            that.timeCount = 0;
-            that.time = 0;
-            that.score = 0;
-            that.timeDiv.innerHTML = 0;
-            that.scoreDiv.innerHTML = 0;
-            that.gameData = [
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ];
-            //当前方块
-            that.cur = SquareFactory.prototype.make(generateType(), generateDir());
-            //下一个方块
-            that.next = SquareFactory.prototype.make(generateType(), generateDir());
-            //divs
-            that.gameDivs = [];
-            that.nextDivs = [];
-            if (!that.timer) {
-                that.timer = setInterval(move, INTERVAL);
-            }
-            if (document.onkeydown === null) {
-                that.bindKeyEvent();
-            }
-            that.start();
-        };
+        if (this.type === 'local') {
+            socket.on('lose', function (data) {
+                that.stopGame();
+                that.gameResult(true);
+            });
+        }
     };
 
     /**
@@ -550,9 +506,9 @@
      */
     Tetris.prototype.gameResult = function (result) {
         if (result) {
-            return 'You win';
+            this.resultDiv.innerHTML = 'You win';
         } else {
-            return 'You lose';
+            this.resultDiv.innerHTML = 'You lose';
         }
     };
 

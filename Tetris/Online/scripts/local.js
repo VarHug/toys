@@ -3,6 +3,7 @@ var Local = function (socket) {
     var $ = function (ele) {
         return document.getElementById(ele);
     };
+
     /**
      * 开始
      * 
@@ -49,7 +50,4 @@ var Local = function (socket) {
         start();
     });
 
-    socket.on('lose', function (data) {
-        
-    });
 }

@@ -61,7 +61,8 @@ var Remote = function (socket) {
         });
 
         socket.on('lose' ,function (data) {
-            remoteGame.gameResult(true);
+            remoteGame.gameResult(false);
+            remoteGame.stopGame();
         });        
     };    
 
