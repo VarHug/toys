@@ -54,6 +54,8 @@ io.on('connection', function (socket) {
     bindListener(socket, 'line');
     bindListener(socket, 'time');
     bindListener(socket, 'lose');
+    bindListener(socket, 'bottomLines');
+    bindListener(socket, 'addTailLines');
 
     //客户端断开
     socket.on('disconnect', function () {

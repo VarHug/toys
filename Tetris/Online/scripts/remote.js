@@ -63,7 +63,11 @@ var Remote = function (socket) {
         socket.on('lose' ,function (data) {
             remoteGame.gameResult(false);
             remoteGame.stopGame();
-        });        
+        });     
+        
+        socket.on('addTailLines', function (data) {
+            remoteGame.addTailLines(data);
+        })
     };    
 
     bindEvents();

@@ -74,8 +74,14 @@
                 that.fixed();
                 socket.emit('fixed');
                 var line = that.clearRow();
-                that.addScore(line);
-                socket.emit('line', line);
+                if (line) {
+                    that.addScore(line);
+                    socket.emit('line', line);  
+                    if (line > 1) {
+                        var bottomLines = generateBottomLine(line);
+                        socket.emit('bottomLines', bottomLines);
+                    } 
+                }
                 if (that.checkGameOver()) {
                     that.stopGame();
                     that.gameResult(false);
@@ -106,6 +112,11 @@
                 document.getElementById('remote_gameover').innerHTML = '已掉线';
                 that.stopGame();
            });
+
+            socket.on('bottomLines', function (data) {
+                that.addTailLines(data);
+                socket.emit('addTailLines', data); 
+            });
         }
     };
 
