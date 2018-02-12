@@ -100,6 +100,12 @@
                 that.stopGame();
                 that.gameResult(true);
             });
+
+            socket.on('leave', function () {
+                document.getElementById('local_gameover').innerHTML = '对方掉线';
+                document.getElementById('remote_gameover').innerHTML = '已掉线';
+                that.stopGame();
+           });
         }
     };
 

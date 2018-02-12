@@ -49,5 +49,4 @@ var Local = function (socket) {
         $('waiting').innerHTML = '';
         start();
     });
-
 }

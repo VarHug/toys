@@ -16,9 +16,14 @@ app.listen(PORT);
 var bindListener = function (socket, event) {
     socket.on(event, function (data) {
         if (socket.clientNum % 2 === 0) {
-            socketMap[socket.clientNum - 1].emit(event, data); 
+            if (socketMap[socket.clientNum - 1]) {
+                socketMap[socket.clientNum - 1].emit(event, data);   
+            }
+             
         } else {
-            socketMap[socket.clientNum + 1].emit(event, data);
+            if (socketMap[socket.clientNum + 1]) {
+                socketMap[socket.clientNum + 1].emit(event, data); 
+            }
         }
     });
 };
@@ -32,8 +37,10 @@ io.on('connection', function (socket) {
     if (clientCount & 1) {
         socket.emit('waiting', 'waiting for another person');
     } else {
-        socket.emit('start');
-        socketMap[(clientCount - 1)].emit('start');
+        if (socketMap[(clientCount - 1)]) {
+            socket.emit('start');
+            socketMap[(clientCount - 1)].emit('start');
+        }
     }
     
     bindListener(socket, 'init');
@@ -50,7 +57,18 @@ io.on('connection', function (socket) {
 
     //客户端断开
     socket.on('disconnect', function () {
-        
+        if (socket.clientNum % 2 === 0) {
+            if (socketMap[socket.clientNum - 1]) {
+                socketMap[socket.clientNum - 1].emit('leave'); 
+            }
+            
+        } else {
+            if (socketMap[socket.clientNum + 1]) {
+                socketMap[socket.clientNum + 1].emit('leave');   
+            }
+        }
+
+        delete(socketMap[socket.clientNum]);
     });
 });
 
