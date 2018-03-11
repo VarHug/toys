@@ -47,17 +47,16 @@ table {
 }
 
 .rating {
-    width: 330px;
+    width: 190px;
     margin: 250px auto;
     overflow: hidden;
 }
 
 .rating-item {
     float: left;
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
-    border-radius: 50%;
-    margin-left: 10px;
+    width: 33px;
+    height: 33px;
+    background: url(./star.png) 0 0 no-repeat;
     cursor: pointer;
+    margin-left: 5px;
 }

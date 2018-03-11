@@ -10,11 +10,11 @@ var rating = (function () {
         $ratingItem.each(function (index) {
             if (index < num) {
                 $(this).css({
-                    'background-color' : 'red'
+                    'background-position' : '-1px -40px'
                 });
             } else {
                 $(this).css({
-                    'background-color' : '#ffffff'
+                    'background-position' : '0 0'
                 });
             }
         });  
