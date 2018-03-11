@@ -1,37 +1,59 @@
 $(document).ready(function () {
 
-var num = 2,
-    $rating = $('#rating'),
-    $ratingItem = $rating.find('.rating-item');
-/**
- * 点亮圆圈函数
- * 
- * @param {number} num 
- */
-var lightOn = function (num) {
-    $ratingItem.each(function (index) {
-        if (index < num) {
-            $(this).css({
-                'background-color' : 'red'
-            });
-        } else {
-            $(this).css({
-                'background-color' : '#ffffff'
+var rating = (function () {
+    /**
+     * 点亮圆圈函数
+     * 
+     * @param {number} num 
+     */
+    var lightOn = function ($ratingItem, num) {
+        $ratingItem.each(function (index) {
+            if (index < num) {
+                $(this).css({
+                    'background-color' : 'red'
+                });
+            } else {
+                $(this).css({
+                    'background-color' : '#ffffff'
+                });
+            }
+        });  
+    };
+
+    var init = function (ele, num) {
+        var $rating = $(ele),
+            $ratingItem = $rating.find('.rating-item');
+        
+
+        lightOn($ratingItem, num);
+
+        //事件绑定
+        $rating.on('mouseover', '.rating-item', function () {
+            lightOn($ratingItem, $(this).index() + 1); 
+        }).on('click', '.rating-item', function () {
+            num = $(this).index() + 1;
+        }).on('mouseout', function () {
+            lightOn($ratingItem, num); 
+        }); 
+    };
+    
+    //jQuery插件
+    $.fn.extend({
+        rating: function (num) {
+            return this.each(function () {
+                init(this, num);       
             });
         }
-    });  
-};
+    });
 
-lightOn(num);
+    return {
+        init : init
+    };
+})();
 
-$ratingItem.on('mouseover', function () {
-    lightOn($(this).index() + 1); 
-}).on('click', function () {
-    num = $(this).index() + 1;
-})
-$rating.on('mouseout', function () {
-    lightOn(num); 
-});
+rating.init('#rating', 2);
+
+$('#rating2').rating(4);
 
 
 
