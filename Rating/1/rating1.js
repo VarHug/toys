@@ -9,7 +9,9 @@ var rating = (function () {
     };
     LightEntire.prototype.init = function () {
         this.lightOn(this.opts.num);
-        this.bindEvents();  
+        if (!this.opts.readOnly) {
+            this.bindEvents();
+        }  
     };
     LightEntire.prototype.lightOn = function (num) {
         num = parseInt(num);
@@ -26,11 +28,19 @@ var rating = (function () {
         });
     };
     LightEntire.prototype.bindEvents = function () {
-        var _this_ = this;
+        var _this_ = this,
+            itemLength = _this_.$item.length;
         _this_.$ele.on('mouseover', '.rating-item', function () {
-            _this_.lightOn($(this).index() + 1); 
+            var num = $(this).index() + 1;
+            _this_.lightOn(num);
+            
+            (typeof _this_.opts.select === 'function') && _this_.opts.select.call(this, num, itemLength);
+            _this_.$ele.trigger('select', [num, itemLength]);
         }).on('click', '.rating-item', function () {
             _this_.opts.num = $(this).index() + 1;
+
+            (typeof _this_.opts.chosen === 'function') && _this_.opts.chosen.call(this, _this_.opts.num, itemLength);
+            _this_.$ele.trigger('chosen', [_this_.opts.num, itemLength]);
         }).on('mouseout', function () {
             _this_.lightOn(_this_.opts.num); 
         }); 
@@ -56,7 +66,16 @@ var rating = (function () {
 })();
 
 rating.init('#rating', {
-    num : 2
+    num : 2,
+    // select: function (num, total) {
+    //     console.log(this);
+    //     console.log(num + '/' + total);
+    // }
+});
+$('#rating').on('select', function (e, num, total) {
+    console.log(num + '/' + total);
+}).on('chosen', function (e, num, total) {
+    console.log(num + '/' + total);
 });
 
 
