@@ -51,17 +51,22 @@ var rating = (function () {
             
             (typeof _this_.opts.select === 'function') && _this_.opts.select.call(this, num, itemLength);
             _this_.$ele.trigger('select', [num, itemLength]);
-        }).on('click', '.rating-item', function () {
+        });
+        _this_.$ele.on('click', '.rating-item', function () {
             _this_.opts.num = $(this).index() + _this_.add;
 
             (typeof _this_.opts.chosen === 'function') && _this_.opts.chosen.call(this, _this_.opts.num, itemLength);
             _this_.$ele.trigger('chosen', [_this_.opts.num, itemLength]);
-        }).on('mouseout', function () {
+        });
+        _this_.$ele.on('mouseout', function () {
             _this_.lightOn(_this_.opts.num); 
         }); 
     };
     Light.prototype.select = function () {
         throw new Error('子类必须重写该方法');
+    };
+    Light.prototype.unbindEvent = function () {
+        this.$ele.off();  
     };
 
     //点亮整颗
@@ -117,14 +122,20 @@ var rating = (function () {
     };
 
     //初始化
-    var init = function (ele, options) {
-        options = $.extend({}, defaults, options);
+    var init = function (ele, option) {
+        var $ele = $(ele),
+            rating = $ele.data('rating'),
+            options = $.extend({}, defaults, typeof option === 'object' && option);
         if (!mode[options.mode]) {
             options.mode = 'LightEntire';
         }
-        // new LightEntire(ele, options).init();
-        // new LightHalf(ele, options).init();
-        new mode[options.mode](ele, options).init();
+        if (!rating) {
+            $ele.data('rating', (rating = new mode[options.mode](ele, options)));
+            rating.init();
+        }
+        if (typeof option === 'string') {
+            rating[option]();
+        }
     };
 
     return {
@@ -134,11 +145,14 @@ var rating = (function () {
 
 rating.init('#rating', {
     mode : 'LightEntire',
-    num : 2.5
+    num : 2.5,
     // select: function (num, total) {
     //     console.log(this);
     //     console.log(num + '/' + total);
     // }
+    chosen : function () {
+        rating.init('#rating', 'unbindEvent');
+    }
 });
 // $('#rating').on('select', function (e, num, total) {
 //     console.log(num + '/' + total);
