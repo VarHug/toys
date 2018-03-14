@@ -138,6 +138,15 @@ var rating = (function () {
         }
     };
 
+    //jQuery插件
+    $.fn.extend({
+        rating : function (option) {
+            return this.each(function () {
+                init(this, option); 
+            });
+        }
+    });
+
     return {
         init : init
     }
@@ -150,10 +159,17 @@ rating.init('#rating', {
     //     console.log(this);
     //     console.log(num + '/' + total);
     // }
-    chosen : function () {
-        rating.init('#rating', 'unbindEvent');
-    }
+    // chosen : function () {
+    //     rating.init('#rating', 'unbindEvent');
+    // }
 });
+$('#rating2').rating({
+    mode : 'LightHalf',
+    num : 2.5,
+    chosen : function () {
+        rating.init('#rating2', 'unbindEvent');
+    }
+})
 // $('#rating').on('select', function (e, num, total) {
 //     console.log(num + '/' + total);
 // }).on('chosen', function (e, num, total) {
