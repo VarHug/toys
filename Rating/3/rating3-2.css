@@ -1,0 +1,56 @@
+.wrap {
+    position: relative;
+    width: 160px;
+    height: 32px;
+    margin: 100px auto;
+    overflow: hidden;
+}
+.rating {
+    position: relative;
+    width: 160px;
+    height: 32px;
+    background: url(./rating.jpg) no-repeat;
+}
+.rating-item {
+    position: absolute;
+    top: 0px;
+    z-index: 3;
+    width: 32px;
+    height: 32px;
+}
+.rating-item-1 {
+    left: 0px;
+}
+.rating-item-2 {
+    left: 32px;
+}
+.rating-item-3 {
+    left: 64px;
+}
+.rating-item-4 {
+    left: 96px;
+}
+.rating-item-5 {
+    left: 128px;
+}
+.rating-item:hover {
+    left: 0px;
+    z-index: 2;
+    width: 160px;
+    background: url(./rating.jpg) no-repeat; 
+}
+.rating-item-1:hover, .rating-1 {
+    background-position: 0 -32px;
+}
+.rating-item-2:hover, .rating-2 {
+    background-position: 0 -64px;
+}
+.rating-item-3:hover, .rating-3 {
+    background-position: 0 -96px;
+}
+.rating-item-4:hover, .rating-4 {
+    background-position: 0 -128px;
+}
+.rating-item-5:hover, .rating-5 {
+    background-position: 0 -160px;
+}
