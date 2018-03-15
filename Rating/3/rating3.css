@@ -1,9 +1,24 @@
+#rating-1, #rating-2, #rating-3, #rating-4, #rating-5 {
+    display: none;
+}
+#rating-1:target, #rating-2:target, #rating-3:target, #rating-4:target, #rating-5:target {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.wrap {
+    position: relative;
+    width: 160px;
+    height: 32px;
+    margin: 100px auto;
+    overflow: hidden;
+}
 .rating {
     position: relative;
     width: 160px;
     height: 32px;
     background: url(./rating.jpg) no-repeat;
-    margin: 100px auto;
 }
 .rating-item {
     position: absolute;
