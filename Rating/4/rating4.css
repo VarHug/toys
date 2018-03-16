@@ -1,0 +1,49 @@
+.rating {
+    position: relative;
+    width: 165px;
+    height: 33px;
+    background: url(./star.png) repeat-x;
+    margin: 100px auto;
+}
+.rating-item {
+    position: absolute;
+    top: 0px;
+    z-index: 3;
+    width: 33px;
+    height: 33px;
+}
+.rating-item-1 {
+    left: 0px;
+}
+.rating-item-2 {
+    left: 33px;
+}
+.rating-item-3 {
+    left: 66px;
+}
+.rating-item-4 {
+    left: 99px;
+}
+.rating-item-5 {
+    left: 132px;
+}
+.rating-item:hover {
+    left: 0;
+    z-index: 2;
+    background: url(./star.png) repeat-x -1px -40px;
+}
+.rating-item-1:hover {
+    width: 33px;
+}
+.rating-item-2:hover {
+    width: 66px;
+}
+.rating-item-3:hover {
+    width: 99px;
+}
+.rating-item-4:hover {
+    width: 132px;
+}
+.rating-item-5:hover {
+    width: 165px;   
+}
