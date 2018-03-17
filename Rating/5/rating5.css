@@ -1,0 +1,33 @@
+body, ul, li {
+    padding: 0px;
+    margin: 0px;
+}
+li {
+    list-style-type: none;
+}
+.rating, .rating-display {
+    background: url(./star.png) repeat-x;
+}
+.rating {
+    position: relative;
+    /* width: 165px; */
+    height: 33px;
+    margin: 100px auto;
+}
+.rating-display {
+    width: 0px;
+    height: 33px;
+    background-position: -1px -40px;
+}
+.rating-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+.rating-item {
+    float: left;
+    width: 33px;
+    height: 33px;
+    cursor: pointer;
+}
