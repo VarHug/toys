@@ -1,4 +1,18 @@
 var rating = (function () {
+    //策略对象
+    var strategies = {
+        entire: function () {
+            return 1;  
+        },
+        half: function () {
+            return 2;
+        },  
+        quarter: function () {
+            return 4;
+        }
+    };
+
+
     /**
      * 星星构造函数
      * 
@@ -8,11 +22,21 @@ var rating = (function () {
     var Rating = function (ele, options) {
         this.$ele = $(ele);
         this.opts = $.extend({}, Rating.DEFAULTS, options);
-        this.itemWidth = 33;
+
+        if (!strategies[this.opts.mode]) {
+            this.opts.mode = 'entire';
+        }
+        //点亮整颗、半颗、四分之一颗星星的系数
+        this.ratio = strategies[this.opts.mode]();
+        this.opts.total *= this.ratio;
+        this.opts.num *= this.ratio;
+
+        this.itemWidth = 33 / this.ratio;
         this.displayWidth = this.opts.num * this.itemWidth;
     };
     //默认配置参数
     Rating.DEFAULTS = {
+        mode: 'entire',
         total: 5,
         num: 2,
         readOnly: false,
@@ -104,6 +128,7 @@ var rating = (function () {
 })();
 
 $('#rating').rating({
+    mode: 'half',
     total: 6,
     num: 3,
     readOnly: false,
