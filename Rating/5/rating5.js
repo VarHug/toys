@@ -70,16 +70,53 @@ var rating = (function () {
             _this_.$display.width(_this_.displayWidth);
         });
     };
+    Rating.prototype.unbindEvent = function () {
+        this.$ele.off();  
+    };
 
     var init = function (ele, option) {
-        new Rating(ele, option).init();
+        var $ele = $(ele),
+            rating = $ele.data('rating');
+
+        if (!rating) {
+            $ele.data('rating', (rating = new Rating(ele, typeof option === 'object' && option)));
+            rating.init();
+        }
+
+        if (typeof option === 'string') {
+            rating[option]();
+        }
     };
+
+    //jQuery插件形式
+    $.fn.extend({
+        rating: function (option) {
+            //this指向获取的元素或元素集合
+            return this.each(function () {
+                init(this, option);
+            });
+        }
+    });
 
     return {
         init : init
     }; 
 })();
 
-rating.init('#rating', {
-
+$('#rating').rating({
+    total: 6,
+    num: 3,
+    readOnly: false,
+    chosen: function () {
+        $('#rating').rating('unbindEvent');
+    } 
 });
+
+// rating.init('#rating', {
+//     total: 6,
+//     num: 3,
+//     readOnly: false,
+//     chosen: function () {
+//         rating.init('#rating', 'unbindEvent');
+//     }
+// });
