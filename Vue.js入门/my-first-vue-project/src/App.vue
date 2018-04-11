@@ -3,13 +3,14 @@
     <!-- <img src="./assets/logo.png">
     <router-view/> -->
     <h1>{{title}}</h1>
-    <h1 v-text="title2"></h1>
-    <h1 v-html="title3"></h1>
+    <input type="text" v-model="newItem" v-on:keyup.enter="addNew()">
     <ul>
-      <li v-bind:class="{finished: item.isFinished}" v-for="item in items">
+      <li v-for="item in items" v-bind:class="{finished: item.isFinished}"  v-on:click="toggleFinish(item)">
         {{item.label}}
       </li>
     </ul>
+    <h1 v-text="title2"></h1>
+    <h1 v-html="title3"></h1>
   </div>
 </template>
 
@@ -24,13 +25,26 @@ export default {
       items : [
         {
           label: 'coding',
-          isFinished: false
+          isFinished: true
         },
         {
           label: 'walking',
           isFinished: true
         }
       ],
+      newItem : ''
+    }
+  },
+  methods : {
+    toggleFinish: function (item) {
+      item.isFinished = !item.isFinished;
+    },
+    addNew: function () {
+      this.items.push({
+        label: this.newItem,
+        isFinished: false
+      });
+      this.newItem = '';
     }
   }
 }
