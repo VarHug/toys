@@ -3,8 +3,8 @@
     <!-- <img src="./assets/logo.png">
     <router-view/> -->
     <h1>{{title}}</h1>
-    <input type="text" v-model="newItem" v-on:keyup.enter="addNew()">
-    <ul>
+    <input class="todo-input" type="text" v-model="newItem" v-on:keyup.enter="addNew()">
+    <ul class="todolist">
       <li v-for="item in items" v-bind:class="{finished: item.isFinished}"  v-on:click="toggleFinish(item)">
         {{item.label}}
       </li>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import Store from './store.js';
+
 export default {
   // name: 'App'
   data() {
@@ -22,17 +24,16 @@ export default {
       title : 'this is a todo list',
       title2 : 'this is a title2 test',
       title3 : '<p>this is a v-html test</p>',
-      items : [
-        {
-          label: 'coding',
-          isFinished: true
-        },
-        {
-          label: 'walking',
-          isFinished: true
-        }
-      ],
+      items : Store.fetch(),
       newItem : ''
+    }
+  },
+  watch: {
+    items: {
+      handler: function (items) {
+        Store.save(items);
+      },
+      deep: true
     }
   },
   methods : {
@@ -61,5 +62,18 @@ export default {
 }
 .finished {
   text-decoration: underline;
+}
+.todo-input {
+  width: 240px;
+  margin: 0 auto;
+  margin-left: 40px;
+}
+.todolist {
+  width: 200px;
+  margin: 10px auto;
+}
+.todolist li {
+  cursor: pointer;
+  list-style-type: none;
 }
 </style>
