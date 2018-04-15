@@ -1,7 +1,8 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        productlist: []
+        productlist: [],
+        totalMoney: 0
     },
     filters: {
 
@@ -13,7 +14,8 @@ var vm = new Vue({
         cartView: function () {
             var _this_ = this;
             axios.get('../data/cartData.json').then(function (res) {
-                
+                _this_.productlist = res.data.result.list;
+                _this_.totalMoney = res.data.result.totalMoney;
             });
         }
     }
