@@ -2,7 +2,8 @@ var vm = new Vue({
     el: '#app',
     data: {
         productlist: [],
-        totalMoney: 0
+        totalMoney: 0,
+        checkAll: false
     },
     filters: {
         formatMoney: function (value) {
@@ -19,6 +20,33 @@ var vm = new Vue({
             axios.get('../data/cartData.json').then(res => {
                 this.productlist = res.data.result.list;
                 this.totalMoney = res.data.result.totalMoney;
+            });
+        },
+        changeMoney: function (product, num) {
+            product.productQuantity += num;
+            if (product.productQuantity < 1) {
+                product.productQuantity = 1;
+            }
+        },
+        selectedProduct: function (product) {
+            if (typeof product.checked === 'undefined') {
+                this.$set(product, 'checked', true);
+            } else {
+                product.checked = !product.checked;
+            }
+
+            this.checkAll = this.productlist.every(product => {
+                return product.checked === true;
+            })
+        },
+        checkAllEvent: function (type) {
+            this.checkAll = type;
+            this.productlist.forEach(product => {
+                if (typeof product.checked === 'undefined') {
+                    this.$set(product, 'checked', this.checkAll);
+                } else {
+                    product.checked = this.checkAll;
+                }
             });
         }
     }
