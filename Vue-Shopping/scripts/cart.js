@@ -5,17 +5,20 @@ var vm = new Vue({
         totalMoney: 0
     },
     filters: {
-
+        formatMoney: function (value) {
+            return '¥ ' + value.toFixed(2);
+        }
     },
     mounted: function () {
-        this.cartView();
+        this.$nextTick(function () {
+            this.cartView();
+        })
     },
     methods: {
         cartView: function () {
-            var _this_ = this;
-            axios.get('../data/cartData.json').then(function (res) {
-                _this_.productlist = res.data.result.list;
-                _this_.totalMoney = res.data.result.totalMoney;
+            axios.get('../data/cartData.json').then(res => {
+                this.productlist = res.data.result.list;
+                this.totalMoney = res.data.result.totalMoney;
             });
         }
     }

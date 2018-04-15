@@ -84,7 +84,7 @@
                       </div>
                     </div>
                     <div class="cart-tab-2">
-                      <div class="item-price" v-text="item.productPrice"></div>
+                      <div class="item-price" >{{item.productPrice | formatMoney}}</div>
                     </div>
                     <div class="cart-tab-3">
                       <div class="item-quantity">
@@ -100,7 +100,7 @@
                     </div>
                     <!-- 总金额 -->
                     <div class="cart-tab-4">
-                      <div class="item-price-total" v-text="item.productPrice*item.productQuantity"></div>
+                      <div class="item-price-total">{{item.productPrice*item.productQuantity | formatMoney}}</div>
                     </div>
                     <div class="cart-tab-5">
                       <div class="cart-item-operation">
