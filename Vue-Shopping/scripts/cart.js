@@ -3,7 +3,19 @@ var vm = new Vue({
     data: {
         productlist: [],
         totalMoney: 0,
-        checkAll: false
+        checkAll: false,
+        totalPrice: 0
+    },
+    computed:{
+        calcTotalPrice: function () {
+            this.totalPrice = 0;
+            this.productlist.forEach(product => {
+                if (product.checked) {
+                    this.totalPrice += product.productPrice * product.productQuantity;
+                }
+            });
+            return this.totalPrice;
+        }
     },
     filters: {
         formatMoney: function (value) {
@@ -13,7 +25,7 @@ var vm = new Vue({
     mounted: function () {
         this.$nextTick(function () {
             this.cartView();
-        })
+        });
     },
     methods: {
         cartView: function () {
