@@ -4,7 +4,9 @@ var vm = new Vue({
         productlist: [],
         totalMoney: 0,
         checkAll: false,
-        totalPrice: 0
+        totalPrice: 0,
+        isDel: false,
+        curProduct: ''
     },
     computed:{
         calcTotalPrice: function () {
@@ -60,6 +62,15 @@ var vm = new Vue({
                     product.checked = this.checkAll;
                 }
             });
+        },
+        delConfirm: function (product) {
+            this.isDel = true;
+            this.curProduct = product;
+        },
+        delProduct: function () {
+            let index = this.productlist.indexOf(this.curProduct);
+            this.productlist.splice(index, 1);
+            this.isDel = false;
         }
     }
 });
