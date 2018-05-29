@@ -1,0 +1,12 @@
+{
+  "name": "fightImage",
+  "version": "1.0.0",
+  "description": "* 本demo根据方糖全栈课，动图小工厂制作\r * 地址：http://study.163.com/course/introduction.htm?courseId=1005226030#/courseDetail?tab=1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
