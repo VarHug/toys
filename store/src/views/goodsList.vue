@@ -47,42 +47,6 @@
                     </div>
                   </div>
                 </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="static/2.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">1000</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="static/3.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">500</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="static/4.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">2499</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
               </ul>
             </div>
           </div>
@@ -101,8 +65,14 @@ import vBread from '../components/bread/bread';
 export default {
   data() {
     return {
-
+      goodsList: []
     };
+  },
+  mounted() {
+    this.$axios.get('/api/goods').then(response => {
+      var res = response.data;
+      console.log(res);
+    });
   },
   components: {
     'v-header': vHeader,
