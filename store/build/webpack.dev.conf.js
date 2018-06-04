@@ -16,9 +16,9 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 const express = require('express')
 const app = express()
 
-var goodsData = require('../mock/goods.json');
-var apiRoutes = express.Router();
-app.use('/api', apiRoutes);
+// var goodsData = require('../mock/goods.json');
+// var apiRoutes = express.Router();
+// app.use('/api', apiRoutes);
 
 
 const devWebpackConfig = merge(baseWebpackConfig, {
@@ -50,12 +50,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    },
-    before(app) {
-      app.get('/api/goods', (req, res) => {
-        res.json(goodsData);
-      })
-    }	     
+    }
+    // ,
+    // before(app) {
+    //   app.get('http://localhost:3000/goods', (req, res) => {
+    //     res.json(goodsData);
+    //   })
+    // }
   },
   plugins: [
     new webpack.DefinePlugin({

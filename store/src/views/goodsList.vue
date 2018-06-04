@@ -28,7 +28,7 @@
               <ul>
                 <li v-for="(item,index) in goodsList" :key="index">
                   <div class="pic">
-                    <a href="#"><img v-lazy="'/static/'+item.prodcutImg" alt=""></a>
+                    <a href="#"><img v-lazy="'/static/'+item.productImage" alt=""></a>
                   </div>
                   <div class="main">
                     <div class="name">{{item.productName}}</div>
@@ -76,10 +76,9 @@ export default {
     };
   },
   mounted() {
-    this.$axios.get('/api/goods').then(response => {
+    this.$axios.get('/goods').then(response => {
       var res = response.data;
-      this.goodsList = res.result;
-      console.log(this.goodsList);
+      this.goodsList = res.result.list;
     });
   },
   methods: {
