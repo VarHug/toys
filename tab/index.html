@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tab选项卡</title>
+  <link href="https://cdn.bootcss.com/minireset.css/0.0.2/minireset.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./tab.styl">
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <div class="tab tab-hook" 
+  data-config='{
+    "triggerType": "click",
+    "effect": "fade",
+    "invoke": 2,
+    "auto": 5000
+  }'>
+    <ul class="tab-nav">
+      <li class="active">001</li>
+      <li>002</li>
+      <li>003</li>
+    </ul>
+    <div class="tab-content">
+      <div class="content-item current">
+        <img src="./001.jpg">
+      </div>
+      <div class="content-item">
+        <img src="./002.jpg">
+      </div>
+      <div class="content-item">
+        <img src="./003.jpg">
+      </div>
+    </div>
+  </div>
+
+  <script src="./index.js"></script>
+</body>
+</html>

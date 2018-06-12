@@ -1,0 +1,40 @@
+body
+  font-size 12px
+  font-family: '微软雅黑'
+  background #323232
+  .tab
+    .tab-nav
+      height 30px
+      font-size 0
+      li
+        display inline-block
+        vertical-align top
+        margin-right 5px
+        padding 0 20px
+        line-height 30px
+        height 30px
+        font-size 20px
+        color #ffffff
+        background-color #767676
+        border-radius 3px 3px 0 0
+        cursor pointer
+        &.active
+          color #777
+          background #fff
+    .tab-content
+      position relative
+      padding 10px
+      width 620px
+      height 348px
+      font-size 0
+      background #fff
+      .content-item
+        position absolute
+        top 10px
+        left 10px
+        width 600px
+        height 328px
+        display none
+        overflow hidden
+        &.current
+          display block
