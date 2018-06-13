@@ -11,18 +11,28 @@ var defaultParams = {
 
 var Tab = function (ele) {
   this.tab = ele;
-
   this.config = defaultParams;
-
   if (this.getConfig()) {
     $.extend(this.config, this.getConfig());
   }
-
   this.$tabNav = this.tab.find('.tab-nav');
   this.$tabItems = this.tab.find('.tab-nav li');
   this.$contentItems = this.tab.find('.tab-content .content-item');
-
   this.bindEvents(this.config);
+  if (this.config.auto) {
+    this.timer = null;
+    // 计时器
+    this.loop = 0;
+    this.autoPlay();
+  }
+  this.tab.hover(() => {
+    window.clearInterval(this.timer);
+  }, () => {
+    this.autoPlay();
+  });
+  if (this.config.invoke > 1) {
+    this.invoke(this.$tabItems[this.config.invoke]);
+  }
 };
 
 /**
@@ -49,6 +59,10 @@ Tab.prototype.bindEvents = function (config) {
   }
 };
 
+/**
+ * 切换
+ * @param {Object} ele
+ */
 Tab.prototype.invoke = function (ele) {
   let $ele = $(ele);
   let index = $ele.index();
@@ -61,6 +75,33 @@ Tab.prototype.invoke = function (ele) {
   } else {
     this.$contentItems.eq(index).addClass('current').siblings().removeClass('current');
   }
+
+  if (this.config.auto) {
+    this.loop = index;
+  }
 };
+
+/**
+ * 自动播放
+ */
+Tab.prototype.autoPlay = function () {
+  let $tabItems = this.$tabItems;
+  let tabLength = $tabItems.length;
+
+  this.timer = window.setInterval(() => {
+    this.loop++;
+    this.loop %= tabLength;
+    this.invoke($tabItems[this.loop]);
+  }, this.config.auto)
+};
+
+$.fn.extend({
+  createTab() {
+    this.each(function () {
+      new Tab($(this));
+    });
+    return this;
+  }
+});
 
 export {Tab};
