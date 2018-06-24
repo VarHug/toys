@@ -1,0 +1,42 @@
+html, body {
+  height: 100%;
+}
+.content {
+  position: relative;
+  width: 1500px;
+  height: 800px;
+  margin: 0 auto;
+}
+.btn {
+  width: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.prev {
+  left: 0;
+}
+.next {
+  right: 0;
+}
+.icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: #666;
+}
+.icon:hover {
+  color: #999;
+}
+.image-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 1000px;
+  max-height: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+#img {
+  max-height: 800px;
+}
