@@ -1,0 +1,7 @@
+@import './model.styl'
+
+.layer
+  div
+    width 375px
+    height 364px
+    background url('../../common/images/1.jpg') no-repeat
